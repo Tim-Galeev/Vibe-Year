@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-## Сани - фикс геймпада (just_pressed), без анимации урона при неуязвимости
+## Сани - бросок не работает над UI
 
 signal gift_thrown(gift: Node2D)
 
@@ -21,7 +21,6 @@ var snowflakes: Array = []
 var champagne_bottles_visual: Array = []
 var foam_timer: float = 0.0
 
-# Геймпад - защита от повторных нажатий
 var _champagne_pressed: bool = false
 var _tree_pressed: bool = false
 
@@ -75,13 +74,27 @@ func _physics_process(delta):
 	position.x = clamp(position.x, min_x, max_x)
 	position.y = clamp(position.y, min_y, max_y)
 	
-	# Бросок подарков
+	# Бросок подарков - проверяем что мышь не над UI
 	throw_cooldown -= delta
 	if throw_cooldown <= 0:
-		if Input.is_action_pressed("throw_gift") or Input.is_joy_button_pressed(0, JOY_BUTTON_A):
-			if GameManager.gifts > 0:
-				throw_gift()
-				throw_cooldown = throw_rate
+		var can_throw = false
+		
+		# Клавиатура - всегда можно
+		if Input.is_action_pressed("jump"):  # Пробел
+			can_throw = true
+		
+		# Геймпад - всегда можно
+		if Input.is_joy_button_pressed(0, JOY_BUTTON_A):
+			can_throw = true
+		
+		# Мышь - только если не над UI
+		if Input.is_action_pressed("throw_gift"):
+			if not _is_mouse_over_ui():
+				can_throw = true
+		
+		if can_throw and GameManager.gifts > 0:
+			throw_gift()
+			throw_cooldown = throw_rate
 	
 	# Звёздная сила
 	if GameManager.is_star_power_active():
@@ -90,21 +103,28 @@ func _physics_process(delta):
 			throw_star_gifts()
 			star_throw_timer = star_throw_rate
 	
-	# Ускорение - ФИКС: проверяем отпускание кнопки
+	# Ускорение
 	var champagne_btn = Input.is_joy_button_pressed(0, JOY_BUTTON_RIGHT_SHOULDER)
 	if Input.is_action_just_pressed("use_champagne") or (champagne_btn and not _champagne_pressed):
 		if GameManager.use_champagne():
 			SoundManager.play_sound("boost")
 	_champagne_pressed = champagne_btn
 	
-	# Ёлка - ФИКС: проверяем отпускание кнопки
+	# Ёлка
 	var tree_btn = Input.is_joy_button_pressed(0, JOY_BUTTON_LEFT_SHOULDER)
 	if Input.is_action_just_pressed("use_tree") or (tree_btn and not _tree_pressed):
 		use_tree_grenade()
 	_tree_pressed = tree_btn
 
+func _is_mouse_over_ui() -> bool:
+	# Проверяем позицию мыши - верхняя часть экрана это UI
+	var mouse_pos = get_viewport().get_mouse_position()
+	# Верхние 100 пикселей - зона HUD
+	if mouse_pos.y < 100:
+		return true
+	return false
+
 func _update_visual_effects(delta):
-	# Мигание только при обычной неуязвимости после урона (не при бафе)
 	if GameManager.is_damage_invincible() and not GameManager.is_invincible() and not GameManager.is_animation_invincible():
 		if sprite:
 			sprite.modulate.a = 0.5 if fmod(Time.get_ticks_msec(), 200) < 100 else 1.0
@@ -208,14 +228,12 @@ func take_damage(amount: int = 1):
 	
 	SoundManager.play_sound("damage")
 	
-	# Анимация только если реально получили урон (не неуязвимы)
 	if sprite and not GameManager.is_invincible() and not GameManager.is_animation_invincible():
 		var tween = create_tween()
 		tween.tween_property(sprite, "modulate", Color.RED, 0.1)
 		tween.tween_property(sprite, "modulate", Color.WHITE, 0.2)
 
 func hit_obstacle():
-	# Тряска только если не неуязвимы
 	if GameManager.is_any_invincible():
 		return
 	

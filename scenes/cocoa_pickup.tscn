@@ -12,85 +12,131 @@ script = ExtResource("1_cocoa")
 
 [node name="Visual" type="Node2D" parent="."]
 
+[node name="Shadow" type="ColorRect" parent="Visual"]
+offset_left = -14.0
+offset_top = 14.0
+offset_right = 14.0
+offset_bottom = 18.0
+color = Color(0, 0, 0, 0.15)
+
 [node name="Cup" type="ColorRect" parent="Visual"]
 offset_left = -14.0
-offset_top = -8.0
+offset_top = -10.0
 offset_right = 14.0
-offset_bottom = 16.0
-color = Color(0.95, 0.95, 0.92, 1)
+offset_bottom = 14.0
+color = Color(0.85, 0.15, 0.15, 1)
 
-[node name="CupInner" type="ColorRect" parent="Visual"]
-offset_left = -10.0
-offset_top = -4.0
-offset_right = 10.0
-offset_bottom = 12.0
-color = Color(0.35, 0.2, 0.12, 1)
+[node name="CupShade" type="ColorRect" parent="Visual"]
+offset_left = 4.0
+offset_top = -10.0
+offset_right = 14.0
+offset_bottom = 14.0
+color = Color(0.7, 0.1, 0.1, 1)
+
+[node name="CupRim" type="ColorRect" parent="Visual"]
+offset_left = -15.0
+offset_top = -12.0
+offset_right = 15.0
+offset_bottom = -8.0
+color = Color(0.95, 0.2, 0.2, 1)
+
+[node name="CupBase" type="ColorRect" parent="Visual"]
+offset_left = -12.0
+offset_top = 12.0
+offset_right = 12.0
+offset_bottom = 16.0
+color = Color(0.7, 0.1, 0.1, 1)
+
+[node name="Cocoa" type="ColorRect" parent="Visual"]
+offset_left = -11.0
+offset_top = -8.0
+offset_right = 11.0
+offset_bottom = 4.0
+color = Color(0.4, 0.22, 0.12, 1)
 
 [node name="Handle" type="ColorRect" parent="Visual"]
 offset_left = 14.0
-offset_top = -2.0
+offset_top = -4.0
 offset_right = 22.0
 offset_bottom = 10.0
-color = Color(0.95, 0.95, 0.92, 1)
+color = Color(0.85, 0.15, 0.15, 1)
 
 [node name="HandleHole" type="ColorRect" parent="Visual"]
 offset_left = 16.0
-offset_top = 1.0
+offset_top = -1.0
 offset_right = 20.0
 offset_bottom = 7.0
 color = Color(0.05, 0.08, 0.18, 1)
 
 [node name="Foam1" type="ColorRect" parent="Visual"]
 offset_left = -8.0
-offset_top = -7.0
+offset_top = -10.0
 offset_right = -2.0
-offset_bottom = -2.0
+offset_bottom = -4.0
 color = Color(1, 0.98, 0.95, 1)
 
 [node name="Foam2" type="ColorRect" parent="Visual"]
 offset_left = 0.0
-offset_top = -9.0
-offset_right = 7.0
-offset_bottom = -3.0
+offset_top = -12.0
+offset_right = 8.0
+offset_bottom = -5.0
 color = Color(1, 0.98, 0.95, 1)
 
 [node name="Foam3" type="ColorRect" parent="Visual"]
-offset_left = -4.0
-offset_top = -5.0
+offset_left = -5.0
+offset_top = -8.0
 offset_right = 4.0
-offset_bottom = 0.0
+offset_bottom = -3.0
 color = Color(0.98, 0.95, 0.9, 1)
+
+[node name="Marshmallow1" type="ColorRect" parent="Visual"]
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 0.0
+offset_bottom = 0.0
+color = Color(1, 0.95, 0.9, 1)
+
+[node name="Marshmallow2" type="ColorRect" parent="Visual"]
+offset_left = 2.0
+offset_top = -4.0
+offset_right = 8.0
+offset_bottom = 2.0
+color = Color(0.98, 0.92, 0.88, 1)
 
 [node name="Steam1" type="ColorRect" parent="Visual"]
 offset_left = -6.0
-offset_top = -18.0
+offset_top = -22.0
 offset_right = -3.0
-offset_bottom = -10.0
+offset_bottom = -14.0
 color = Color(1, 1, 1, 0.4)
 
 [node name="Steam2" type="ColorRect" parent="Visual"]
 offset_left = 2.0
-offset_top = -22.0
+offset_top = -26.0
 offset_right = 5.0
-offset_bottom = -12.0
+offset_bottom = -16.0
 color = Color(1, 1, 1, 0.3)
 
 [node name="Steam3" type="ColorRect" parent="Visual"]
 offset_left = -2.0
-offset_top = -15.0
+offset_top = -18.0
 offset_right = 1.0
-offset_bottom = -8.0
+offset_bottom = -12.0
 color = Color(1, 1, 1, 0.35)
 
-[node name="Heart" type="Label" parent="Visual"]
+[node name="Snowflake" type="ColorRect" parent="Visual"]
 offset_left = -10.0
-offset_top = -30.0
+offset_top = -2.0
+offset_right = -6.0
+offset_bottom = 6.0
+color = Color(1, 1, 1, 0.7)
+
+[node name="Heart" type="ColorRect" parent="Visual"]
+offset_left = 4.0
+offset_top = 4.0
 offset_right = 10.0
-offset_bottom = -10.0
-theme_override_colors/font_color = Color(1, 0.4, 0.4, 0.8)
-theme_override_font_sizes/font_size = 14
-text = "♥"
-horizontal_alignment = 1
+offset_bottom = 10.0
+color = Color(1, 0.9, 0.9, 0.8)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_cocoa")

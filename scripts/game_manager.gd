@@ -1,6 +1,6 @@
 extends Node
 
-## Game Manager - исправленный баланс
+## Game Manager - частота бонусов зависит от активности игрока
 
 signal score_changed(new_score: int)
 signal gifts_changed(new_count: int)
@@ -40,7 +40,12 @@ var gifts_thrown: int = 0
 var lives_lost: int = 0
 var first_star_used: bool = false
 var last_star_end_time: float = 0.0
-var last_chimney_hit_time: float = 0.0  # Для мотивации кидать подарки
+
+# Активность игрока - влияет на частоту бонусов
+var last_throw_time: float = 0.0
+var bonus_frequency_multiplier: float = 1.0  # 1.0 = норма, 0.1 = почти нет бонусов
+const ACTIVITY_DECAY_TIME: float = 5.0  # Через 5 сек без бросков начинает падать
+const ACTIVITY_RECOVERY_RATE: float = 0.3  # Восстановление за каждый бросок
 
 # Этапы введения
 var intro_cocoa_given: bool = false
@@ -65,10 +70,9 @@ var cooldown_after_hard: float = 0.0
 const MAX_CHAMPAGNE = 3
 const MAX_TREE_CHARGES = 3
 const MAX_LIVES = 5
-const TREE_CHARGE_TIME = 15.0  # Дольше заряжается
+const TREE_CHARGE_TIME = 15.0
 
-# УВЕЛИЧЕННЫЕ расстояния между бонусами
-const MIN_DISTANCE_BETWEEN_BONUSES = 120  # Было 50, теперь реже
+const MIN_DISTANCE_BETWEEN_BONUSES = 120
 const MIN_DISTANCE_BETWEEN_FIREWORKS = 400
 
 var _tree_charge_timer: float = 0.0
@@ -80,17 +84,12 @@ var _slow_timer: float = 0.0
 var _invincibility_timer: float = 0.0
 var _star_power_timer: float = 0.0
 
-# Нёрф бафов
-const SPEED_BOOST_DURATION = 4.0  # Было 6
-const SPEED_BOOST_MULTIPLIER = 1.6  # Было 1.8
+const SPEED_BOOST_DURATION = 4.0
+const SPEED_BOOST_MULTIPLIER = 1.6
 const SLOW_DURATION = 1.5
 const SLOW_MULTIPLIER = 0.6
-const INVINCIBILITY_DURATION = 5.0  # Было 8
-const STAR_POWER_DURATION = 3.0  # Было 6 - СИЛЬНЫЙ НЁРФ
-
-# Мотивация кидать подарки
-const GIFT_DECAY_TIME = 8.0  # Каждые 8 сек без попадания - теряем подарок
-var _gift_decay_timer: float = 0.0
+const INVINCIBILITY_DURATION = 5.0
+const STAR_POWER_DURATION = 3.0
 
 var leaderboard: Array = []
 const MAX_LEADERBOARD_ENTRIES = 10
@@ -115,20 +114,19 @@ func _process(delta):
 				_tree_charge_timer = 0.0
 				add_tree_charge()
 		
-		# МОТИВАЦИЯ КИДАТЬ - теряем подарки если долго не попадаем
-		_gift_decay_timer += delta
-		if _gift_decay_timer >= GIFT_DECAY_TIME:
-			_gift_decay_timer = 0.0
-			if gifts > 5:  # Не отнимаем если мало
-				gifts -= 1
-				emit_signal("gifts_changed", gifts)
+		# Активность игрока - уменьшаем частоту бонусов если не кидает
+		var time_since_throw = play_time - last_throw_time
+		if time_since_throw > ACTIVITY_DECAY_TIME:
+			# Постепенно уменьшаем множитель
+			var decay = (time_since_throw - ACTIVITY_DECAY_TIME) * 0.05 * delta
+			bonus_frequency_multiplier = max(0.1, bonus_frequency_multiplier - decay)
 		
 		# Сложные сегменты
 		if in_hard_segment:
 			hard_segment_timer -= delta
 			if hard_segment_timer <= 0:
 				in_hard_segment = false
-				cooldown_after_hard = 5.0  # 5 сек отдыха
+				cooldown_after_hard = 5.0
 		
 		if cooldown_after_hard > 0:
 			cooldown_after_hard -= delta
@@ -172,8 +170,8 @@ func reset_game():
 	lives_lost = 0
 	first_star_used = false
 	last_star_end_time = 0.0
-	last_chimney_hit_time = 0.0
-	_gift_decay_timer = 0.0
+	last_throw_time = 0.0
+	bonus_frequency_multiplier = 1.0
 	
 	intro_cocoa_given = false
 	intro_obstacle_added = false
@@ -229,10 +227,9 @@ func add_score(amount: int, pos: Vector2 = Vector2.ZERO):
 	if pos != Vector2.ZERO and amount > 0:
 		emit_signal("score_popup", amount, pos)
 
-# При попадании в дымоход - сбрасываем таймер decay
 func on_chimney_hit():
-	_gift_decay_timer = 0.0
-	last_chimney_hit_time = play_time
+	# При попадании - восстанавливаем частоту бонусов
+	bonus_frequency_multiplier = min(1.0, bonus_frequency_multiplier + ACTIVITY_RECOVERY_RATE)
 
 # ========== ПОДАРКИ ==========
 
@@ -251,6 +248,9 @@ func use_gift() -> bool:
 	if gifts > 0:
 		gifts -= 1
 		gifts_thrown += 1
+		last_throw_time = play_time
+		# Восстанавливаем частоту бонусов при броске
+		bonus_frequency_multiplier = min(1.0, bonus_frequency_multiplier + ACTIVITY_RECOVERY_RATE * 0.5)
 		emit_signal("gifts_changed", gifts)
 		
 		if gifts <= 0:
@@ -386,6 +386,9 @@ func get_star_power_time_left() -> float:
 func get_tree_charge_progress() -> float:
 	return _tree_charge_timer / TREE_CHARGE_TIME
 
+func get_bonus_frequency() -> float:
+	return bonus_frequency_multiplier
+
 # ========== ПРОГРЕССИЯ ==========
 
 func should_spawn_intro_cocoa() -> bool:
@@ -421,7 +424,7 @@ func mark_intro_elf_given():
 func should_spawn_first_star() -> bool:
 	if intro_star_given:
 		return false
-	return score >= 1500  # Было 1000
+	return score >= 1500
 
 func mark_first_star_given():
 	intro_star_given = true

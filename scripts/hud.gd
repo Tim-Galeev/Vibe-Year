@@ -1,73 +1,59 @@
 extends CanvasLayer
 
-## HUD - поддержка геймпада, фикс кнопок звука
+## HUD - исправленное подключение кнопок
 
-@onready var center_hud: HBoxContainer = $CenterHUD
-@onready var score_label: Label = $CenterHUD/ScoreContainer/ScoreLabel
-@onready var champagne_label: Label = $CenterHUD/ChampagneContainer/Label
-@onready var tree_label: Label = $CenterHUD/TreeContainer/Top/Label
-@onready var tree_progress: ProgressBar = $CenterHUD/TreeContainer/TreeProgress
-@onready var gifts_label: Label = $CenterHUD/GiftsContainer/Label
-@onready var lives_label: Label = $CenterHUD/LivesContainer/Label
+@onready var center_hud = $CenterHUD
+@onready var score_label = $CenterHUD/ScoreContainer/ScoreLabel
+@onready var champagne_label = $CenterHUD/ChampagneContainer/Label
+@onready var tree_label = $CenterHUD/TreeContainer/Top/Label
+@onready var tree_progress = $CenterHUD/TreeContainer/TreeProgress
+@onready var gifts_label = $CenterHUD/GiftsContainer/Label
+@onready var lives_label = $CenterHUD/LivesContainer/Label
 
-@onready var buffs_label: Label = $BuffsLabel
-@onready var announcement_label: Label = $AnnouncementLabel
+@onready var buffs_label = $BuffsLabel
+@onready var announcement_label = $AnnouncementLabel
 
-@onready var game_over_panel: Panel = $GameOverPanel
-@onready var final_score_label: Label = $GameOverPanel/VBoxContainer/FinalScoreLabel
-@onready var name_input: LineEdit = $GameOverPanel/VBoxContainer/NameInput
-@onready var save_score_button: Button = $GameOverPanel/VBoxContainer/SaveScoreButton
-@onready var leaderboard_container: VBoxContainer = $GameOverPanel/VBoxContainer/LeaderboardContainer
-@onready var restart_button: Button = $GameOverPanel/VBoxContainer/RestartButton
+@onready var game_over_panel = $GameOverPanel
+@onready var final_score_label = $GameOverPanel/VBoxContainer/FinalScoreLabel
+@onready var name_input = $GameOverPanel/VBoxContainer/NameInput
+@onready var save_score_button = $GameOverPanel/VBoxContainer/SaveScoreButton
+@onready var leaderboard_container = $GameOverPanel/VBoxContainer/LeaderboardContainer
+@onready var restart_button = $GameOverPanel/VBoxContainer/RestartButton
 
-@onready var start_panel: Panel = $StartPanel
-@onready var start_button: Button = $StartPanel/VBoxContainer/StartButton
-@onready var music_button: Button = $StartPanel/VBoxContainer/HBoxContainer/MusicButton
-@onready var sfx_button: Button = $StartPanel/VBoxContainer/HBoxContainer/SFXButton
-@onready var leaderboard_start: VBoxContainer = $StartPanel/VBoxContainer/LeaderboardStart
+@onready var start_panel = $StartPanel
+@onready var start_button = $StartPanel/VBoxContainer/StartButton
+@onready var music_button = $StartPanel/VBoxContainer/HBoxContainer/MusicButton
+@onready var sfx_button = $StartPanel/VBoxContainer/HBoxContainer/SFXButton
+@onready var leaderboard_start = $StartPanel/VBoxContainer/LeaderboardStart
 
-@onready var sound_buttons: HBoxContainer = $SoundButtons
+@onready var sound_buttons = $SoundButtons
 
 var popup_container: Node2D
-
-# Геймпад навигация
 var menu_buttons: Array = []
 var current_button_index: int = 0
 var _joy_pressed: bool = false
 
 func _ready():
-	if GameManager:
-		GameManager.score_changed.connect(_on_score_changed)
-		GameManager.gifts_changed.connect(_on_gifts_changed)
-		GameManager.champagne_changed.connect(_on_champagne_changed)
-		GameManager.tree_charges_changed.connect(_on_tree_charges_changed)
-		GameManager.lives_changed.connect(_on_lives_changed)
-		GameManager.tree_charge_progress.connect(_on_tree_progress)
-		GameManager.game_over.connect(_on_game_over)
-		GameManager.game_started.connect(_on_game_started)
-		GameManager.speed_boost_started.connect(_on_bonus_update)
-		GameManager.speed_boost_ended.connect(_on_bonus_update)
-		GameManager.invincibility_started.connect(_on_bonus_update)
-		GameManager.invincibility_ended.connect(_on_bonus_update)
-		GameManager.star_power_started.connect(_on_bonus_update)
-		GameManager.star_power_ended.connect(_on_bonus_update)
-		GameManager.score_popup.connect(_on_score_popup)
-		GameManager.gift_popup.connect(_on_gift_popup)
-		GameManager.pickup_fly_to_hud.connect(_on_pickup_fly)
-		GameManager.big_announcement.connect(_on_big_announcement)
-		GameManager.tree_appeared_on_sleigh.connect(_on_tree_appeared)
-	
-	# Подключаем кнопки
-	if restart_button:
-		restart_button.pressed.connect(_on_restart_pressed)
-	if start_button:
-		start_button.pressed.connect(_on_start_pressed)
-	if save_score_button:
-		save_score_button.pressed.connect(_on_save_score_pressed)
-	if music_button:
-		music_button.pressed.connect(_on_music_toggle)
-	if sfx_button:
-		sfx_button.pressed.connect(_on_sfx_toggle)
+	# Сигналы GameManager
+	GameManager.score_changed.connect(_on_score_changed)
+	GameManager.gifts_changed.connect(_on_gifts_changed)
+	GameManager.champagne_changed.connect(_on_champagne_changed)
+	GameManager.tree_charges_changed.connect(_on_tree_charges_changed)
+	GameManager.lives_changed.connect(_on_lives_changed)
+	GameManager.tree_charge_progress.connect(_on_tree_progress)
+	GameManager.game_over.connect(_on_game_over)
+	GameManager.game_started.connect(_on_game_started)
+	GameManager.speed_boost_started.connect(_on_bonus_update)
+	GameManager.speed_boost_ended.connect(_on_bonus_update)
+	GameManager.invincibility_started.connect(_on_bonus_update)
+	GameManager.invincibility_ended.connect(_on_bonus_update)
+	GameManager.star_power_started.connect(_on_bonus_update)
+	GameManager.star_power_ended.connect(_on_bonus_update)
+	GameManager.score_popup.connect(_on_score_popup)
+	GameManager.gift_popup.connect(_on_gift_popup)
+	GameManager.pickup_fly_to_hud.connect(_on_pickup_fly)
+	GameManager.big_announcement.connect(_on_big_announcement)
+	GameManager.tree_appeared_on_sleigh.connect(_on_tree_appeared)
 	
 	popup_container = Node2D.new()
 	popup_container.z_index = 100
@@ -76,16 +62,35 @@ func _ready():
 	if announcement_label:
 		announcement_label.visible = false
 	
+	# Отложенная инициализация кнопок
+	call_deferred("_connect_buttons")
 	call_deferred("_setup_initial_state")
 
-func _process(delta):
-	if GameManager and GameManager.is_game_running:
+func _connect_buttons():
+	# Кнопки
+	if restart_button:
+		restart_button.pressed.connect(_on_restart_pressed)
+	if start_button:
+		start_button.pressed.connect(_on_start_pressed)
+	if save_score_button:
+		save_score_button.pressed.connect(_on_save_score_pressed)
+	
+	# Кнопки звука - подключаем напрямую
+	var mb = get_node_or_null("StartPanel/VBoxContainer/HBoxContainer/MusicButton")
+	var sb = get_node_or_null("StartPanel/VBoxContainer/HBoxContainer/SFXButton")
+	
+	if mb:
+		mb.pressed.connect(_on_music_toggle)
+	if sb:
+		sb.pressed.connect(_on_sfx_toggle)
+
+func _process(_delta):
+	if GameManager.is_game_running:
 		_update_buffs_display()
 	else:
 		_handle_menu_input()
 
 func _handle_menu_input():
-	# Геймпад навигация в меню
 	var joy_y = Input.get_joy_axis(0, JOY_AXIS_LEFT_Y)
 	var dpad_up = Input.is_joy_button_pressed(0, JOY_BUTTON_DPAD_UP)
 	var dpad_down = Input.is_joy_button_pressed(0, JOY_BUTTON_DPAD_DOWN)
@@ -98,7 +103,6 @@ func _handle_menu_input():
 			_navigate_menu(1)
 			_joy_pressed = true
 		
-		# Подтверждение
 		if Input.is_joy_button_pressed(0, JOY_BUTTON_A):
 			_confirm_menu()
 			_joy_pressed = true
@@ -136,10 +140,13 @@ func _setup_initial_state():
 	show_start_screen()
 
 func _update_sound_buttons():
-	if music_button:
-		music_button.text = "🎵 ВКЛ" if SoundManager.music_enabled else "🎵 ВЫКЛ"
-	if sfx_button:
-		sfx_button.text = "🔊 ВКЛ" if SoundManager.sfx_enabled else "🔊 ВЫКЛ"
+	var mb = get_node_or_null("StartPanel/VBoxContainer/HBoxContainer/MusicButton")
+	var sb = get_node_or_null("StartPanel/VBoxContainer/HBoxContainer/SFXButton")
+	
+	if mb:
+		mb.text = "🎵 ВКЛ" if SoundManager.music_enabled else "🎵 ВЫКЛ"
+	if sb:
+		sb.text = "🔊 ВКЛ" if SoundManager.sfx_enabled else "🔊 ВЫКЛ"
 
 func _on_music_toggle():
 	SoundManager.toggle_music()
@@ -150,12 +157,11 @@ func _on_sfx_toggle():
 	_update_sound_buttons()
 
 func update_all_labels():
-	if GameManager:
-		_on_score_changed(GameManager.score)
-		_on_gifts_changed(GameManager.gifts)
-		_on_champagne_changed(GameManager.champagne_bottles)
-		_on_tree_charges_changed(GameManager.tree_charges)
-		_on_lives_changed(GameManager.lives)
+	_on_score_changed(GameManager.score)
+	_on_gifts_changed(GameManager.gifts)
+	_on_champagne_changed(GameManager.champagne_bottles)
+	_on_tree_charges_changed(GameManager.tree_charges)
+	_on_lives_changed(GameManager.lives)
 
 func _on_score_changed(new_score: int):
 	if score_label:
@@ -194,27 +200,23 @@ func _on_bonus_update():
 	_update_buffs_display()
 
 func _update_buffs_display():
-	if not buffs_label or not GameManager:
+	if not buffs_label:
 		return
 	
 	var buffs = []
 	
 	if GameManager.is_speed_boosted():
-		var t = GameManager.get_speed_boost_time_left()
-		buffs.append("🍾 %.1fs" % t)
+		buffs.append("🍾 %.1fs" % GameManager.get_speed_boost_time_left())
 	
 	if GameManager.is_invincible():
-		var t = GameManager.get_invincibility_time_left()
-		buffs.append("❄️ %.1fs" % t)
+		buffs.append("❄️ %.1fs" % GameManager.get_invincibility_time_left())
 	
 	if GameManager.is_star_power_active():
-		var t = GameManager.get_star_power_time_left()
-		buffs.append("⭐ %.1fs" % t)
+		buffs.append("⭐ %.1fs" % GameManager.get_star_power_time_left())
 	
 	if buffs.size() > 0:
 		buffs_label.text = " | ".join(buffs)
 		buffs_label.visible = true
-		buffs_label.modulate.a = 0.8 + sin(Time.get_ticks_msec() / 200.0) * 0.2
 	else:
 		buffs_label.visible = false
 
@@ -301,19 +303,16 @@ func _on_big_announcement(text: String, color: Color):
 	tween.tween_property(announcement_label, "scale", Vector2(1.2, 1.2), 0.2)
 	tween.tween_property(announcement_label, "scale", Vector2(1.0, 1.0), 0.1)
 	tween.tween_interval(1.0)
-	tween.tween_property(announcement_label, "global_position:y", announcement_label.global_position.y + 50, 0.4)
-	tween.parallel().tween_property(announcement_label, "modulate:a", 0.0, 0.4)
-	tween.tween_callback(func(): announcement_label.visible = false; announcement_label.global_position.y -= 50)
+	tween.tween_property(announcement_label, "modulate:a", 0.0, 0.5)
+	tween.tween_callback(func(): announcement_label.visible = false)
 
-func _on_tree_appeared(slot: int):
-	var sleigh = get_tree().get_first_node_in_group("sleigh")
-	if sleigh and sleigh.has_method("show_tree_on_sleigh"):
-		sleigh.show_tree_on_sleigh(slot)
+func _on_tree_appeared(_slot: int):
+	pass
 
 func _on_game_over():
 	if game_over_panel:
 		game_over_panel.visible = true
-	if final_score_label and GameManager:
+	if final_score_label:
 		final_score_label.text = "Счёт: %d" % GameManager.score
 	if name_input:
 		name_input.text = ""
@@ -323,7 +322,6 @@ func _on_game_over():
 	if sound_buttons:
 		sound_buttons.visible = false
 	
-	# Кнопки для геймпада
 	menu_buttons = [restart_button]
 	if save_score_button and save_score_button.visible:
 		menu_buttons.insert(0, save_score_button)
@@ -349,9 +347,16 @@ func show_start_screen():
 	if sound_buttons:
 		sound_buttons.visible = false
 	
-	# Кнопки для геймпада
-	menu_buttons = [music_button, sfx_button, start_button]
-	current_button_index = 2  # Фокус на ИГРАТЬ
+	var mb = get_node_or_null("StartPanel/VBoxContainer/HBoxContainer/MusicButton")
+	var sb = get_node_or_null("StartPanel/VBoxContainer/HBoxContainer/SFXButton")
+	var stb = get_node_or_null("StartPanel/VBoxContainer/StartButton")
+	
+	menu_buttons = []
+	if mb: menu_buttons.append(mb)
+	if sb: menu_buttons.append(sb)
+	if stb: menu_buttons.append(stb)
+	
+	current_button_index = menu_buttons.size() - 1
 	_highlight_current_button()
 	
 	_update_leaderboard_display()
@@ -360,8 +365,7 @@ func _on_restart_pressed():
 	get_tree().reload_current_scene()
 
 func _on_start_pressed():
-	if GameManager:
-		GameManager.start_game()
+	GameManager.start_game()
 
 func _on_save_score_pressed():
 	if name_input and name_input.text.strip_edges() != "":

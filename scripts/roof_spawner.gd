@@ -1,6 +1,6 @@
 extends Node2D
 
-## Генератор - сбрасывается при рестарте
+## Генератор уровня - частота бонусов зависит от активности игрока
 
 signal roof_passed(roof: Node2D)
 
@@ -26,12 +26,9 @@ var _initialized: bool = false
 func _ready():
 	roof_scene = preload("res://scenes/roof.tscn")
 	firework_scene = preload("res://scenes/firework.tscn")
-	
-	# Ждём старта игры
 	GameManager.game_started.connect(_on_game_started)
 
 func _on_game_started():
-	# Полный сброс при старте/рестарте
 	_clear_all()
 	_spawn_initial_roofs()
 	_initialized = true
@@ -42,7 +39,6 @@ func _clear_all():
 			roof.queue_free()
 	roofs.clear()
 	
-	# Удаляем все фейерверки
 	for child in get_children():
 		if child.is_in_group("hazard"):
 			child.queue_free()
@@ -197,6 +193,7 @@ func _spawn_progressive_content(roof: Node2D, width: float, safe_zones: Array, r
 
 func _spawn_regular_content(roof: Node2D, width: float, safe_zones: Array, roof_y: float):
 	var difficulty = min(GameManager.game_speed, 2.5)
+	var bonus_freq = GameManager.get_bonus_frequency()  # 0.1 - 1.0
 	
 	var obstacle_chance = 0.1 * difficulty
 	if GameManager.is_in_hard_segment():
@@ -212,8 +209,9 @@ func _spawn_regular_content(roof: Node2D, width: float, safe_zones: Array, roof_
 	if randf() < 0.08:
 		_spawn_helper_safe(roof, "mandarin_trampoline", safe_zones)
 	
+	# Бонусы - частота зависит от активности игрока
 	if GameManager.can_spawn_bonus() and not GameManager.is_in_hard_segment():
-		var bonus = _choose_bonus()
+		var bonus = _choose_bonus(bonus_freq)
 		if bonus != "":
 			_spawn_pickup_safe(roof, bonus, safe_zones, roof_y)
 			GameManager.register_bonus_spawn(bonus)
@@ -223,8 +221,9 @@ func _spawn_regular_content(roof: Node2D, width: float, safe_zones: Array, roof_
 			_spawn_pickup_safe(roof, "cocoa", safe_zones, roof_y)
 			GameManager.register_bonus_spawn("cocoa")
 
-func _choose_bonus() -> String:
-	if randf() > 0.4:
+func _choose_bonus(frequency: float) -> String:
+	# Чем ниже frequency, тем меньше шанс бонуса
+	if randf() > 0.4 * frequency:
 		return ""
 	
 	var available = []
