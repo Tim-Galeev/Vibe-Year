@@ -15,6 +15,7 @@ config/description="Новогодний автораннер - бросай п�
 run/main_scene="res://scenes/game.tscn"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://icon.svg"
+addons/icon_finder/preview_size=24
 
 [autoload]
 
@@ -31,6 +32,10 @@ window/stretch/mode="canvas_items"
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/icons-fonts/plugin.cfg")
+
+[gui]
+
+theme/custom="res://theme.tres"
 
 [input]
 

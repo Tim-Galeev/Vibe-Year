@@ -44,109 +44,127 @@ script = ExtResource("4_hud")
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -350.0
+offset_left = -380.0
 offset_top = 8.0
-offset_right = 350.0
-offset_bottom = 70.0
+offset_right = 380.0
+offset_bottom = 58.0
 grow_horizontal = 2
-theme_override_constants/separation = 25
+theme_override_constants/separation = 30
 alignment = 1
 
 [node name="ChampagneContainer" type="HBoxContainer" parent="HUD/CenterHUD"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 4
 
 [node name="Icon" type="Label" parent="HUD/CenterHUD/ChampagneContainer"]
 layout_mode = 2
+size_flags_vertical = 4
 theme_override_font_sizes/font_size = 32
 text = "🍾"
+vertical_alignment = 1
 
 [node name="Label" type="Label" parent="HUD/CenterHUD/ChampagneContainer"]
 layout_mode = 2
+size_flags_vertical = 4
 theme_override_colors/font_color = Color(0.8, 1, 0.8, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
 theme_override_font_sizes/font_size = 28
 text = "0"
+vertical_alignment = 1
 
-[node name="TreeContainer" type="VBoxContainer" parent="HUD/CenterHUD"]
+[node name="TreeContainer" type="HBoxContainer" parent="HUD/CenterHUD"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
-theme_override_constants/separation = 0
+size_flags_vertical = 4
+theme_override_constants/separation = 4
 
-[node name="Top" type="HBoxContainer" parent="HUD/CenterHUD/TreeContainer"]
+[node name="Icon" type="Label" parent="HUD/CenterHUD/TreeContainer"]
 layout_mode = 2
-
-[node name="Icon" type="Label" parent="HUD/CenterHUD/TreeContainer/Top"]
-layout_mode = 2
+size_flags_vertical = 4
 theme_override_font_sizes/font_size = 32
 text = "🎄"
+vertical_alignment = 1
 
-[node name="Label" type="Label" parent="HUD/CenterHUD/TreeContainer/Top"]
+[node name="Label" type="Label" parent="HUD/CenterHUD/TreeContainer"]
 layout_mode = 2
+size_flags_vertical = 4
 theme_override_colors/font_color = Color(0.5, 1, 0.5, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
 theme_override_font_sizes/font_size = 28
 text = "1"
-
-[node name="TreeProgress" type="ProgressBar" parent="HUD/CenterHUD/TreeContainer"]
-custom_minimum_size = Vector2(60, 8)
-layout_mode = 2
-theme_override_styles/fill = null
-max_value = 100.0
-value = 0.0
-show_percentage = false
+vertical_alignment = 1
 
 [node name="ScoreContainer" type="HBoxContainer" parent="HUD/CenterHUD"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
+size_flags_vertical = 4
 
 [node name="ScoreLabel" type="Label" parent="HUD/CenterHUD/ScoreContainer"]
 layout_mode = 2
+size_flags_vertical = 4
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 38
 text = "0"
+vertical_alignment = 1
 
 [node name="GiftsContainer" type="HBoxContainer" parent="HUD/CenterHUD"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 4
 
 [node name="Icon" type="Label" parent="HUD/CenterHUD/GiftsContainer"]
 layout_mode = 2
+size_flags_vertical = 4
 theme_override_font_sizes/font_size = 32
 text = "🎁"
+vertical_alignment = 1
 
 [node name="Label" type="Label" parent="HUD/CenterHUD/GiftsContainer"]
 layout_mode = 2
+size_flags_vertical = 4
 theme_override_colors/font_color = Color(1, 0.9, 0.3, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
 theme_override_font_sizes/font_size = 28
 text = "20"
+vertical_alignment = 1
 
 [node name="LivesContainer" type="HBoxContainer" parent="HUD/CenterHUD"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
+size_flags_vertical = 4
 
 [node name="Label" type="Label" parent="HUD/CenterHUD/LivesContainer"]
 layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.9, 0.2, 0.2, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 28
 text = "❤️❤️❤️"
+vertical_alignment = 1
 
 [node name="BuffsLabel" type="Label" parent="HUD"]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -200.0
-offset_top = 65.0
+offset_top = 60.0
 offset_right = 200.0
-offset_bottom = 90.0
+offset_bottom = 85.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(1, 0.95, 0.4, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 2
 theme_override_font_sizes/font_size = 16
-text = "⭐ БОНУС"
+text = ""
 horizontal_alignment = 1
 
 [node name="AnnouncementLabel" type="Label" parent="HUD"]
@@ -166,7 +184,7 @@ theme_override_colors/font_color = Color(1, 0.9, 0.3, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 48
-text = "ЗВЕЗДА!"
+text = "⭐ ЗВЕЗДА!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
