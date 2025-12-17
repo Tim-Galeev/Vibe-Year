@@ -23,10 +23,9 @@ func _on_body_entered(body):
 	emit_signal("gift_received")
 	
 	if is_star:
-		GameManager.add_score(15, global_position)  # Меньше очков
+		GameManager.add_score(15, global_position)
 	else:
 		GameManager.add_score(100, global_position)
-		GameManager.add_gift()  # Возврат подарка только за обычные
 		GameManager.on_chimney_hit()  # Сброс decay таймера
 	
 	SoundManager.play_sound("chimney_hit")

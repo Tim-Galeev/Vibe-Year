@@ -1,6 +1,6 @@
 extends Area2D
 
-## Эльф - даёт 10-20 подарков
+## Эльф - даёт 12-22 подарков
 
 signal collected
 
@@ -18,7 +18,7 @@ func _on_body_entered(body):
 		_collect()
 
 func _collect():
-	var bonus_gifts = randi_range(10, 20)
+	var bonus_gifts = randi_range(12, 22)  # Было 10-20
 	GameManager.add_gifts(bonus_gifts, global_position)
 	emit_signal("collected")
 	SoundManager.play_sound("pickup")

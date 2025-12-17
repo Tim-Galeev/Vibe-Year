@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://bank137x7rqxm"]
 
-[ext_resource type="Script" path="res://scripts/gift.gd" id="1_gift"]
+[ext_resource type="Script" uid="uid://bq8u8ud3j1p38" path="res://scripts/gift.gd" id="1_gift"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gift"]
 size = Vector2(32, 32)
@@ -31,7 +31,6 @@ color = Color(0.85, 0.15, 0.15, 1)
 
 [node name="BoxShade" type="ColorRect" parent="Visual"]
 offset_left = -15.0
-offset_top = 0.0
 offset_right = 15.0
 offset_bottom = 15.0
 color = Color(0.7, 0.1, 0.1, 1)
@@ -59,7 +58,6 @@ color = Color(0.95, 0.85, 0.2, 1)
 
 [node name="RibbonVShade" type="ColorRect" parent="Visual"]
 offset_left = -3.0
-offset_top = 0.0
 offset_right = 3.0
 offset_bottom = 15.0
 color = Color(0.8, 0.7, 0.15, 1)

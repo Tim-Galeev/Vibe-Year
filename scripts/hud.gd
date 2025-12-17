@@ -5,7 +5,8 @@ extends CanvasLayer
 @onready var center_hud = $CenterHUD
 @onready var score_label = $CenterHUD/ScoreContainer/ScoreLabel
 @onready var champagne_label = $CenterHUD/ChampagneContainer/Label
-@onready var tree_label = $CenterHUD/TreeContainer/Label
+@onready var tree_label = $CenterHUD/TreeContainer/Top/Label
+@onready var tree_progress = $CenterHUD/TreeContainer/TreeProgress
 @onready var gifts_label = $CenterHUD/GiftsContainer/Label
 @onready var lives_label = $CenterHUD/LivesContainer/Label
 
@@ -191,9 +192,9 @@ func _on_tree_charges_changed(new_count: int):
 	if tree_label:
 		tree_label.text = str(new_count)
 
-func _on_tree_progress(_progress: float):
-	# Progress bar убран для выравнивания HUD
-	pass
+func _on_tree_progress(progress: float):
+	if tree_progress:
+		tree_progress.value = progress * 100
 
 func _on_bonus_update():
 	_update_buffs_display()

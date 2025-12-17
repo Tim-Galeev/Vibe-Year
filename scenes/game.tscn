@@ -75,28 +75,40 @@ theme_override_font_sizes/font_size = 28
 text = "0"
 vertical_alignment = 1
 
-[node name="TreeContainer" type="HBoxContainer" parent="HUD/CenterHUD"]
+[node name="TreeContainer" type="VBoxContainer" parent="HUD/CenterHUD"]
 custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 2
+
+[node name="Top" type="HBoxContainer" parent="HUD/CenterHUD/TreeContainer"]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 4
 
-[node name="Icon" type="Label" parent="HUD/CenterHUD/TreeContainer"]
+[node name="Icon" type="Label" parent="HUD/CenterHUD/TreeContainer/Top"]
 layout_mode = 2
 size_flags_vertical = 4
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 28
 text = "🎄"
 vertical_alignment = 1
 
-[node name="Label" type="Label" parent="HUD/CenterHUD/TreeContainer"]
+[node name="Label" type="Label" parent="HUD/CenterHUD/TreeContainer/Top"]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_colors/font_color = Color(0.5, 1, 0.5, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 24
 text = "1"
 vertical_alignment = 1
+
+[node name="TreeProgress" type="ProgressBar" parent="HUD/CenterHUD/TreeContainer"]
+custom_minimum_size = Vector2(50, 6)
+layout_mode = 2
+max_value = 100.0
+value = 0.0
+show_percentage = false
 
 [node name="ScoreContainer" type="HBoxContainer" parent="HUD/CenterHUD"]
 custom_minimum_size = Vector2(0, 50)
@@ -133,7 +145,7 @@ theme_override_colors/font_color = Color(1, 0.9, 0.3, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
 theme_override_font_sizes/font_size = 28
-text = "20"
+text = "25"
 vertical_alignment = 1
 
 [node name="LivesContainer" type="HBoxContainer" parent="HUD/CenterHUD"]
@@ -250,7 +262,7 @@ alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.2, 0.2, 1)
 theme_override_font_sizes/font_size = 32
-text = "🎅 Новогодний Заброс 🎅"
+text = "🎅 Vibe Year 🎅"
 horizontal_alignment = 1
 
 [node name="Subtitle" type="Label" parent="HUD/StartPanel/VBoxContainer"]

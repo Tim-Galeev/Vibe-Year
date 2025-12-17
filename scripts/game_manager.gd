@@ -159,7 +159,7 @@ func _process(delta):
 
 func reset_game():
 	score = 0
-	gifts = 20
+	gifts = 25  # Было 20, увеличили т.к. попадание не возвращает подарок
 	champagne_bottles = 0
 	tree_charges = 1
 	lives = 3

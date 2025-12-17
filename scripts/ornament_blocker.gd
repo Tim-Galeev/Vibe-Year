@@ -32,7 +32,8 @@ func _update_color():
 		$Visual/Highlight1.color.a = 0.5
 
 func on_gift_hit(is_star_gift: bool = false):
-	# Просто разбивается, без штрафа
+	# Даём небольшое количество очков за сбитие шарика
+	GameManager.add_score(25, global_position)
 	emit_signal("destroyed")
 	SoundManager.play_sound("ornament_break")
 	_destroy_effect()

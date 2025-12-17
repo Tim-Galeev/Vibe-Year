@@ -45,7 +45,7 @@ func _physics_process(delta):
 	
 	var input_dir = Vector2.ZERO
 	
-	if Input.is_action_pressed("move_up") or Input.is_action_pressed("jump"):
+	if Input.is_action_pressed("move_up"):
 		input_dir.y -= 1
 	if Input.is_action_pressed("move_down"):
 		input_dir.y += 1
@@ -79,9 +79,7 @@ func _physics_process(delta):
 	if throw_cooldown <= 0:
 		var can_throw = false
 		
-		# Клавиатура - всегда можно
-		if Input.is_action_pressed("jump"):  # Пробел
-			can_throw = true
+		# Клавиатура - пробел (throw_gift включает пробел)
 		
 		# Геймпад - всегда можно
 		if Input.is_joy_button_pressed(0, JOY_BUTTON_A):
@@ -199,6 +197,16 @@ func throw_star_gifts():
 	var gift_scene = preload("res://scenes/gift.tscn")
 	var count = randi_range(4, 6)
 	
+	# Яркие цвета для звёздных подарков
+	var star_colors = [
+		Color(0.2, 0.6, 1.0),    # Синий
+		Color(0.2, 1.0, 0.4),    # Зелёный
+		Color(1.0, 1.0, 0.2),    # Жёлтый
+		Color(1.0, 0.4, 0.8),    # Розовый
+		Color(0.6, 0.4, 1.0),    # Фиолетовый
+		Color(0.2, 1.0, 1.0),    # Бирюзовый
+	]
+	
 	for i in range(count):
 		var gift = gift_scene.instantiate()
 		gift.global_position = global_position
@@ -208,7 +216,7 @@ func throw_star_gifts():
 		var angle = i * TAU / count + randf() * 0.3
 		var speed = randf_range(300, 450)
 		gift.set_velocity(Vector2(cos(angle), sin(angle)) * speed)
-		gift.modulate = Color(1, 0.9, 0.5)
+		gift.modulate = star_colors[i % star_colors.size()]
 		
 		get_parent().add_child(gift)
 	
