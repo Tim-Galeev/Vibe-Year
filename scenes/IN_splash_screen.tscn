@@ -1,0 +1,56 @@
+[gd_scene load_steps=3 format=3 uid="uid://dwy64ikk7pq4k"]
+
+[ext_resource type="Script" uid="uid://1x4rtmsyf3b3" path="res://scripts/splash_screen.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://2i2y4g5npb7s" path="res://I-Novus.png" id="2_2r0o7"]
+
+[node name="SplashScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+next_scene = "res://scenes/splash_screen.tscn"
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.04, 0.08, 0.16, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="INovus" type="Sprite2D" parent="CenterContainer/VBoxContainer"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_2r0o7")
+
+[node name="Hint" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -50.0
+offset_right = 150.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 0.7)
+theme_override_font_sizes/font_size = 12
+text = "Нажмите любую клавишу..."
+horizontal_alignment = 1
