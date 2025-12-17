@@ -275,10 +275,10 @@ func _create_snowflakes():
 	_remove_snowflakes()
 	
 	for i in range(6):
-		# ColorRect вместо эмодзи для веб
-		var flake = ColorRect.new()
-		flake.size = Vector2(8, 8)
-		flake.color = Color(0.8, 0.9, 1, 0.8)
+		var flake = Label.new()
+		flake.text = "❄"
+		flake.add_theme_font_size_override("font_size", 16)
+		flake.add_theme_color_override("font_color", Color(0.8, 0.9, 1, 0.8))
 		flake.z_index = 10
 		add_child(flake)
 		snowflakes.append(flake)

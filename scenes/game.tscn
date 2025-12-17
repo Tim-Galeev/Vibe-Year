@@ -44,22 +44,21 @@ script = ExtResource("4_hud")
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -300.0
+offset_left = -350.0
 offset_top = 8.0
-offset_right = 300.0
+offset_right = 350.0
 offset_bottom = 70.0
 grow_horizontal = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 25
 alignment = 1
 
 [node name="ChampagneContainer" type="HBoxContainer" parent="HUD/CenterHUD"]
 layout_mode = 2
-theme_override_constants/separation = 4
 
-[node name="Icon" type="ColorRect" parent="HUD/CenterHUD/ChampagneContainer"]
-custom_minimum_size = Vector2(24, 32)
+[node name="Icon" type="Label" parent="HUD/CenterHUD/ChampagneContainer"]
 layout_mode = 2
-color = Color(0.15, 0.4, 0.18, 1)
+theme_override_font_sizes/font_size = 32
+text = "🍾"
 
 [node name="Label" type="Label" parent="HUD/CenterHUD/ChampagneContainer"]
 layout_mode = 2
@@ -75,12 +74,11 @@ theme_override_constants/separation = 0
 
 [node name="Top" type="HBoxContainer" parent="HUD/CenterHUD/TreeContainer"]
 layout_mode = 2
-theme_override_constants/separation = 4
 
-[node name="Icon" type="ColorRect" parent="HUD/CenterHUD/TreeContainer/Top"]
-custom_minimum_size = Vector2(20, 28)
+[node name="Icon" type="Label" parent="HUD/CenterHUD/TreeContainer/Top"]
 layout_mode = 2
-color = Color(0.2, 0.6, 0.25, 1)
+theme_override_font_sizes/font_size = 32
+text = "🎄"
 
 [node name="Label" type="Label" parent="HUD/CenterHUD/TreeContainer/Top"]
 layout_mode = 2
@@ -91,7 +89,7 @@ theme_override_font_sizes/font_size = 28
 text = "1"
 
 [node name="TreeProgress" type="ProgressBar" parent="HUD/CenterHUD/TreeContainer"]
-custom_minimum_size = Vector2(50, 6)
+custom_minimum_size = Vector2(60, 8)
 layout_mode = 2
 theme_override_styles/fill = null
 max_value = 100.0
@@ -111,12 +109,11 @@ text = "0"
 
 [node name="GiftsContainer" type="HBoxContainer" parent="HUD/CenterHUD"]
 layout_mode = 2
-theme_override_constants/separation = 4
 
-[node name="Icon" type="ColorRect" parent="HUD/CenterHUD/GiftsContainer"]
-custom_minimum_size = Vector2(24, 24)
+[node name="Icon" type="Label" parent="HUD/CenterHUD/GiftsContainer"]
 layout_mode = 2
-color = Color(0.85, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 32
+text = "🎁"
 
 [node name="Label" type="Label" parent="HUD/CenterHUD/GiftsContainer"]
 layout_mode = 2
@@ -128,7 +125,13 @@ text = "20"
 
 [node name="LivesContainer" type="HBoxContainer" parent="HUD/CenterHUD"]
 layout_mode = 2
-theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="HUD/CenterHUD/LivesContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 24
+text = "❤️❤️❤️"
 
 [node name="BuffsLabel" type="Label" parent="HUD"]
 anchors_preset = 5
@@ -143,7 +146,7 @@ theme_override_colors/font_color = Color(1, 0.95, 0.4, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 2
 theme_override_font_sizes/font_size = 16
-text = ""
+text = "⭐ БОНУС"
 horizontal_alignment = 1
 
 [node name="AnnouncementLabel" type="Label" parent="HUD"]
@@ -163,7 +166,7 @@ theme_override_colors/font_color = Color(1, 0.9, 0.3, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 48
-text = "STAR!"
+text = "ЗВЕЗДА!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -180,11 +183,11 @@ grow_horizontal = 0
 
 [node name="MusicToggle" type="Button" parent="HUD/SoundButtons"]
 layout_mode = 2
-text = "M"
+text = "🎵"
 
 [node name="SFXToggle" type="Button" parent="HUD/SoundButtons"]
 layout_mode = 2
-text = "S"
+text = "🔊"
 
 [node name="ControlsHint" type="Label" parent="HUD"]
 anchors_preset = 7
@@ -199,7 +202,7 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 0.5)
 theme_override_font_sizes/font_size = 11
-text = "WASD - move | Click/Space - throw | E - boost | Q - tree"
+text = "WASD - движение | Клик/Пробел - бросок | E - ускорение | Q - ёлка"
 horizontal_alignment = 1
 
 [node name="StartPanel" type="Panel" parent="HUD"]
@@ -208,10 +211,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -220.0
-offset_top = -180.0
-offset_right = 220.0
-offset_bottom = 180.0
+offset_left = -280.0
+offset_top = -200.0
+offset_right = 280.0
+offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -228,14 +231,14 @@ alignment = 1
 [node name="Title" type="Label" parent="HUD/StartPanel/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.2, 0.2, 1)
-theme_override_font_sizes/font_size = 28
-text = "Santa's Chimney Dash"
+theme_override_font_sizes/font_size = 32
+text = "🎅 Новогодний Заброс 🎅"
 horizontal_alignment = 1
 
 [node name="Subtitle" type="Label" parent="HUD/StartPanel/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-text = "Throw gifts into chimneys!"
+text = "Бросай подарки в дымоходы!"
 horizontal_alignment = 1
 
 [node name="LeaderboardStart" type="VBoxContainer" parent="HUD/StartPanel/VBoxContainer"]
@@ -247,16 +250,16 @@ alignment = 1
 
 [node name="MusicButton" type="Button" parent="HUD/StartPanel/VBoxContainer/HBoxContainer"]
 layout_mode = 2
-text = "M: ON"
+text = "🎵 ВКЛ"
 
 [node name="SFXButton" type="Button" parent="HUD/StartPanel/VBoxContainer/HBoxContainer"]
 layout_mode = 2
-text = "S: ON"
+text = "🔊 ВКЛ"
 
 [node name="StartButton" type="Button" parent="HUD/StartPanel/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 26
-text = "PLAY"
+text = "🎄 ИГРАТЬ 🎄"
 
 [node name="GameOverPanel" type="Panel" parent="HUD"]
 visible = false
@@ -265,10 +268,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -180.0
-offset_top = -160.0
-offset_right = 180.0
-offset_bottom = 160.0
+offset_left = -200.0
+offset_top = -180.0
+offset_right = 200.0
+offset_bottom = 180.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -286,24 +289,24 @@ alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.2, 0.2, 1)
 theme_override_font_sizes/font_size = 28
-text = "GAME OVER"
+text = "💔 ИГРА ОКОНЧЕНА 💔"
 horizontal_alignment = 1
 
 [node name="FinalScoreLabel" type="Label" parent="HUD/GameOverPanel/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
-text = "Score: 0"
+text = "Счёт: 0"
 horizontal_alignment = 1
 
 [node name="NameInput" type="LineEdit" parent="HUD/GameOverPanel/VBoxContainer"]
 layout_mode = 2
-placeholder_text = "Enter name..."
+placeholder_text = "Введите имя..."
 alignment = 1
 max_length = 15
 
 [node name="SaveScoreButton" type="Button" parent="HUD/GameOverPanel/VBoxContainer"]
 layout_mode = 2
-text = "Save"
+text = "Сохранить рекорд"
 
 [node name="LeaderboardContainer" type="VBoxContainer" parent="HUD/GameOverPanel/VBoxContainer"]
 layout_mode = 2
@@ -311,4 +314,4 @@ layout_mode = 2
 [node name="RestartButton" type="Button" parent="HUD/GameOverPanel/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Restart"
+text = "🔄 Заново"

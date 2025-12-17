@@ -273,7 +273,7 @@ func use_champagne() -> bool:
 		champagne_bottles -= 1
 		emit_signal("champagne_changed", champagne_bottles)
 		activate_speed_boost()
-		emit_signal("big_announcement", "BOOST!", Color(0.3, 1, 0.5))
+		emit_signal("big_announcement", "УСКОРЕНИЕ!", Color(0.3, 1, 0.5))
 		start_animation_invincibility()
 		return true
 	return false
@@ -346,14 +346,14 @@ func activate_slow():
 func activate_invincibility(from_pos: Vector2 = Vector2.ZERO):
 	_invincibility_timer = INVINCIBILITY_DURATION
 	emit_signal("invincibility_started")
-	emit_signal("big_announcement", "SHIELD!", Color(0.5, 0.8, 1))
+	emit_signal("big_announcement", "НЕУЯЗВИМОСТЬ!", Color(0.5, 0.8, 1))
 	start_animation_invincibility()
 	add_score(5, from_pos)
 
 func activate_star_power(from_pos: Vector2 = Vector2.ZERO):
 	_star_power_timer = STAR_POWER_DURATION
 	emit_signal("star_power_started")
-	emit_signal("big_announcement", "STAR!", Color(1, 0.9, 0.3))
+	emit_signal("big_announcement", "ЗВЕЗДА!", Color(1, 0.9, 0.3))
 	start_animation_invincibility()
 	add_score(10, from_pos)
 
