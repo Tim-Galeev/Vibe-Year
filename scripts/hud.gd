@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-## HUD - исправленное подключение кнопок
+## HUD - без эмодзи (для веб-экспорта)
 
 @onready var center_hud = $CenterHUD
 @onready var score_label = $CenterHUD/ScoreContainer/ScoreLabel
@@ -8,7 +8,7 @@ extends CanvasLayer
 @onready var tree_label = $CenterHUD/TreeContainer/Top/Label
 @onready var tree_progress = $CenterHUD/TreeContainer/TreeProgress
 @onready var gifts_label = $CenterHUD/GiftsContainer/Label
-@onready var lives_label = $CenterHUD/LivesContainer/Label
+@onready var lives_container = $CenterHUD/LivesContainer
 
 @onready var buffs_label = $BuffsLabel
 @onready var announcement_label = $AnnouncementLabel
@@ -32,9 +32,9 @@ var popup_container: Node2D
 var menu_buttons: Array = []
 var current_button_index: int = 0
 var _joy_pressed: bool = false
+var heart_icons: Array = []
 
 func _ready():
-	# Сигналы GameManager
 	GameManager.score_changed.connect(_on_score_changed)
 	GameManager.gifts_changed.connect(_on_gifts_changed)
 	GameManager.champagne_changed.connect(_on_champagne_changed)
@@ -62,12 +62,59 @@ func _ready():
 	if announcement_label:
 		announcement_label.visible = false
 	
-	# Отложенная инициализация кнопок
 	call_deferred("_connect_buttons")
 	call_deferred("_setup_initial_state")
+	call_deferred("_create_heart_icons")
+
+func _create_heart_icons():
+	# Создаём иконки сердец вместо эмодзи
+	if not lives_container:
+		return
+	
+	# Удаляем старый Label если есть
+	for child in lives_container.get_children():
+		child.queue_free()
+	
+	heart_icons.clear()
+	for i in range(5):
+		var heart = _create_heart_shape(i < 3)
+		lives_container.add_child(heart)
+		heart_icons.append(heart)
+
+func _create_heart_shape(filled: bool) -> Control:
+	var container = Control.new()
+	container.custom_minimum_size = Vector2(20, 20)
+	
+	# Сердце из двух кругов и треугольника (упрощённо - квадраты)
+	var color = Color(0.9, 0.2, 0.2) if filled else Color(0.3, 0.3, 0.3)
+	
+	var left = ColorRect.new()
+	left.size = Vector2(10, 10)
+	left.position = Vector2(2, 2)
+	left.color = color
+	container.add_child(left)
+	
+	var right = ColorRect.new()
+	right.size = Vector2(10, 10)
+	right.position = Vector2(8, 2)
+	right.color = color
+	container.add_child(right)
+	
+	var bottom = ColorRect.new()
+	bottom.size = Vector2(12, 10)
+	bottom.position = Vector2(4, 8)
+	bottom.color = color
+	container.add_child(bottom)
+	
+	var tip = ColorRect.new()
+	tip.size = Vector2(6, 6)
+	tip.position = Vector2(7, 14)
+	tip.color = color
+	container.add_child(tip)
+	
+	return container
 
 func _connect_buttons():
-	# Кнопки
 	if restart_button:
 		restart_button.pressed.connect(_on_restart_pressed)
 	if start_button:
@@ -75,7 +122,6 @@ func _connect_buttons():
 	if save_score_button:
 		save_score_button.pressed.connect(_on_save_score_pressed)
 	
-	# Кнопки звука - подключаем напрямую
 	var mb = get_node_or_null("StartPanel/VBoxContainer/HBoxContainer/MusicButton")
 	var sb = get_node_or_null("StartPanel/VBoxContainer/HBoxContainer/SFXButton")
 	
@@ -144,9 +190,9 @@ func _update_sound_buttons():
 	var sb = get_node_or_null("StartPanel/VBoxContainer/HBoxContainer/SFXButton")
 	
 	if mb:
-		mb.text = "🎵 ВКЛ" if SoundManager.music_enabled else "🎵 ВЫКЛ"
+		mb.text = "M: ON" if SoundManager.music_enabled else "M: OFF"
 	if sb:
-		sb.text = "🔊 ВКЛ" if SoundManager.sfx_enabled else "🔊 ВЫКЛ"
+		sb.text = "S: ON" if SoundManager.sfx_enabled else "S: OFF"
 
 func _on_music_toggle():
 	SoundManager.toggle_music()
@@ -181,8 +227,14 @@ func _on_gifts_changed(new_count: int):
 				container.modulate = Color.WHITE
 
 func _on_lives_changed(new_lives: int):
-	if lives_label:
-		lives_label.text = "❤️".repeat(new_lives) + "🖤".repeat(max(0, 3 - new_lives))
+	# Обновляем иконки сердец
+	for i in range(heart_icons.size()):
+		if is_instance_valid(heart_icons[i]):
+			var filled = i < new_lives
+			var color = Color(0.9, 0.2, 0.2) if filled else Color(0.3, 0.3, 0.3)
+			for child in heart_icons[i].get_children():
+				if child is ColorRect:
+					child.color = color
 
 func _on_champagne_changed(new_count: int):
 	if champagne_label:
@@ -206,13 +258,13 @@ func _update_buffs_display():
 	var buffs = []
 	
 	if GameManager.is_speed_boosted():
-		buffs.append("🍾 %.1fs" % GameManager.get_speed_boost_time_left())
+		buffs.append("BOOST %.1fs" % GameManager.get_speed_boost_time_left())
 	
 	if GameManager.is_invincible():
-		buffs.append("❄️ %.1fs" % GameManager.get_invincibility_time_left())
+		buffs.append("SHIELD %.1fs" % GameManager.get_invincibility_time_left())
 	
 	if GameManager.is_star_power_active():
-		buffs.append("⭐ %.1fs" % GameManager.get_star_power_time_left())
+		buffs.append("STAR %.1fs" % GameManager.get_star_power_time_left())
 	
 	if buffs.size() > 0:
 		buffs_label.text = " | ".join(buffs)
@@ -243,10 +295,10 @@ func _on_gift_popup(amount: int, pos: Vector2):
 		return
 	
 	var popup = Label.new()
-	popup.text = "+" + str(amount) + "🎁"
+	popup.text = "+" + str(amount)
 	popup.add_theme_font_size_override("font_size", 28)
 	popup.add_theme_color_override("font_color", Color.GOLD)
-	popup.global_position = pos + Vector2(-35, -30)
+	popup.global_position = pos + Vector2(-20, -30)
 	popup_container.add_child(popup)
 	
 	var tween = popup.create_tween()
@@ -260,23 +312,24 @@ func _on_pickup_fly(icon_type: String, from_pos: Vector2):
 	if not popup_container:
 		return
 	
-	var icon = Label.new()
-	icon.add_theme_font_size_override("font_size", 36)
+	# Создаём цветной квадрат вместо эмодзи
+	var icon = ColorRect.new()
+	icon.size = Vector2(24, 24)
 	
 	var target_pos = Vector2(640, 30)
 	
 	match icon_type:
 		"heart":
-			icon.text = "❤️"
+			icon.color = Color(0.9, 0.2, 0.2)
 			target_pos = Vector2(900, 30)
 		"champagne":
-			icon.text = "🍾"
+			icon.color = Color(0.2, 0.5, 0.2)
 			target_pos = Vector2(450, 30)
 		"gift":
-			icon.text = "🎁"
+			icon.color = Color(0.9, 0.2, 0.2)
 			target_pos = Vector2(780, 30)
 		"tree":
-			icon.text = "🎄"
+			icon.color = Color(0.2, 0.6, 0.2)
 			target_pos = Vector2(550, 30)
 	
 	icon.global_position = from_pos
@@ -286,7 +339,7 @@ func _on_pickup_fly(icon_type: String, from_pos: Vector2):
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_BACK)
 	tween.tween_property(icon, "global_position", target_pos, 0.6)
-	tween.parallel().tween_property(icon, "scale", Vector2(0.5, 0.5), 0.6)
+	tween.parallel().tween_property(icon, "size", Vector2(12, 12), 0.6)
 	tween.tween_callback(icon.queue_free)
 
 func _on_big_announcement(text: String, color: Color):
@@ -313,7 +366,7 @@ func _on_game_over():
 	if game_over_panel:
 		game_over_panel.visible = true
 	if final_score_label:
-		final_score_label.text = "Счёт: %d" % GameManager.score
+		final_score_label.text = "Score: %d" % GameManager.score
 	if name_input:
 		name_input.text = ""
 		name_input.visible = GameManager.is_high_score(GameManager.score)
@@ -380,7 +433,7 @@ func _update_leaderboard_display():
 			child.queue_free()
 		
 		var title = Label.new()
-		title.text = "🏆 РЕКОРДЫ"
+		title.text = "RECORDS"
 		title.add_theme_font_size_override("font_size", 16)
 		title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		leaderboard_start.add_child(title)
