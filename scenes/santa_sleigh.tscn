@@ -1,0 +1,259 @@
+[gd_scene load_steps=3 format=3 uid="uid://cn852620pxg4"]
+
+[ext_resource type="Script" uid="uid://bojww11a5n1wp" path="res://scripts/santa_sleigh.gd" id="1_sleigh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sleigh"]
+size = Vector2(93, 72)
+
+[node name="SantaSleigh" type="CharacterBody2D" groups=["sleigh"]]
+collision_layer = 16
+script = ExtResource("1_sleigh")
+
+[node name="Sprite2D" type="Node2D" parent="."]
+
+[node name="RunnerBackShadow" type="ColorRect" parent="Sprite2D"]
+offset_left = -35.0
+offset_top = 28.0
+offset_right = 45.0
+offset_bottom = 35.0
+color = Color(0, 0, 0, 0.2)
+
+[node name="RunnerBack" type="ColorRect" parent="Sprite2D"]
+offset_left = -40.0
+offset_top = 20.0
+offset_right = 50.0
+offset_bottom = 28.0
+color = Color(0.5, 0.35, 0.2, 1)
+
+[node name="RunnerBackCurve" type="ColorRect" parent="Sprite2D"]
+offset_left = -50.0
+offset_top = 12.0
+offset_right = -38.0
+offset_bottom = 22.0
+color = Color(0.5, 0.35, 0.2, 1)
+
+[node name="RunnerFront" type="ColorRect" parent="Sprite2D"]
+offset_left = -40.0
+offset_top = 22.0
+offset_right = 50.0
+offset_bottom = 26.0
+color = Color(0.6, 0.45, 0.25, 1)
+
+[node name="RunnerFrontCurve" type="ColorRect" parent="Sprite2D"]
+offset_left = 48.0
+offset_top = 10.0
+offset_right = 58.0
+offset_bottom = 24.0
+color = Color(0.6, 0.45, 0.25, 1)
+
+[node name="SleighBody" type="ColorRect" parent="Sprite2D"]
+offset_left = -35.0
+offset_top = -8.0
+offset_right = 45.0
+offset_bottom = 22.0
+color = Color(0.7, 0.15, 0.15, 1)
+
+[node name="SleighInner" type="ColorRect" parent="Sprite2D"]
+offset_left = -30.0
+offset_top = -3.0
+offset_right = 40.0
+offset_bottom = 17.0
+color = Color(0.55, 0.1, 0.1, 1)
+
+[node name="SleighRim" type="ColorRect" parent="Sprite2D"]
+offset_left = -38.0
+offset_top = -12.0
+offset_right = 48.0
+offset_bottom = -6.0
+color = Color(0.8, 0.2, 0.2, 1)
+
+[node name="SleighFront" type="ColorRect" parent="Sprite2D"]
+offset_left = 40.0
+offset_top = -8.0
+offset_right = 52.0
+offset_bottom = 20.0
+color = Color(0.75, 0.18, 0.18, 1)
+
+[node name="GoldTrim1" type="ColorRect" parent="Sprite2D"]
+offset_left = -38.0
+offset_top = -14.0
+offset_right = 48.0
+offset_bottom = -11.0
+color = Color(0.9, 0.75, 0.2, 1)
+
+[node name="GoldTrim2" type="ColorRect" parent="Sprite2D"]
+offset_left = -38.0
+offset_top = 18.0
+offset_right = 48.0
+offset_bottom = 21.0
+color = Color(0.85, 0.7, 0.15, 1)
+
+[node name="SideDecor1" type="ColorRect" parent="Sprite2D"]
+offset_left = -25.0
+offset_top = 2.0
+offset_right = -20.0
+offset_bottom = 12.0
+color = Color(0.9, 0.75, 0.2, 1)
+
+[node name="SideDecor2" type="ColorRect" parent="Sprite2D"]
+offset_top = 2.0
+offset_right = 5.0
+offset_bottom = 12.0
+color = Color(0.9, 0.75, 0.2, 1)
+
+[node name="SideDecor3" type="ColorRect" parent="Sprite2D"]
+offset_left = 25.0
+offset_top = 2.0
+offset_right = 30.0
+offset_bottom = 12.0
+color = Color(0.9, 0.75, 0.2, 1)
+
+[node name="SantaBody" type="ColorRect" parent="Sprite2D"]
+offset_left = -20.0
+offset_top = -35.0
+offset_right = 8.0
+offset_bottom = -5.0
+color = Color(0.85, 0.15, 0.15, 1)
+
+[node name="SantaBelt" type="ColorRect" parent="Sprite2D"]
+offset_left = -20.0
+offset_top = -18.0
+offset_right = 8.0
+offset_bottom = -13.0
+color = Color(0.15, 0.12, 0.1, 1)
+
+[node name="SantaBuckle" type="ColorRect" parent="Sprite2D"]
+offset_left = -10.0
+offset_top = -20.0
+offset_right = -2.0
+offset_bottom = -11.0
+color = Color(0.9, 0.8, 0.2, 1)
+
+[node name="SantaFur1" type="ColorRect" parent="Sprite2D"]
+offset_left = -22.0
+offset_top = -7.0
+offset_right = 10.0
+offset_bottom = -3.0
+
+[node name="SantaFur2" type="ColorRect" parent="Sprite2D"]
+offset_left = -22.0
+offset_top = -37.0
+offset_right = 10.0
+offset_bottom = -33.0
+
+[node name="SantaHead" type="ColorRect" parent="Sprite2D"]
+offset_left = -15.0
+offset_top = -52.0
+offset_right = 5.0
+offset_bottom = -35.0
+color = Color(0.95, 0.8, 0.7, 1)
+
+[node name="SantaBeard" type="ColorRect" parent="Sprite2D"]
+offset_left = -12.0
+offset_top = -42.0
+offset_right = 8.0
+offset_bottom = -33.0
+
+[node name="SantaBeard2" type="ColorRect" parent="Sprite2D"]
+offset_left = -8.0
+offset_top = -38.0
+offset_right = 6.0
+offset_bottom = -30.0
+color = Color(0.95, 0.95, 0.95, 1)
+
+[node name="SantaHat" type="ColorRect" parent="Sprite2D"]
+offset_left = -18.0
+offset_top = -65.0
+offset_right = 8.0
+offset_bottom = -50.0
+color = Color(0.85, 0.12, 0.12, 1)
+
+[node name="SantaHatTip" type="ColorRect" parent="Sprite2D"]
+offset_left = 5.0
+offset_top = -72.0
+offset_right = 18.0
+offset_bottom = -62.0
+color = Color(0.85, 0.12, 0.12, 1)
+
+[node name="SantaHatPom" type="ColorRect" parent="Sprite2D"]
+offset_left = 14.0
+offset_top = -78.0
+offset_right = 26.0
+offset_bottom = -66.0
+
+[node name="SantaHatFur" type="ColorRect" parent="Sprite2D"]
+offset_left = -20.0
+offset_top = -53.0
+offset_right = 10.0
+offset_bottom = -48.0
+
+[node name="SantaEye" type="ColorRect" parent="Sprite2D"]
+offset_left = -4.0
+offset_top = -49.0
+offset_bottom = -45.0
+color = Color(0.1, 0.1, 0.1, 1)
+
+[node name="SantaNose" type="ColorRect" parent="Sprite2D"]
+offset_top = -47.0
+offset_right = 6.0
+offset_bottom = -42.0
+color = Color(0.9, 0.6, 0.5, 1)
+
+[node name="SantaCheek" type="ColorRect" parent="Sprite2D"]
+offset_left = 2.0
+offset_top = -44.0
+offset_right = 7.0
+offset_bottom = -40.0
+color = Color(0.95, 0.5, 0.5, 0.5)
+
+[node name="SantaArm" type="ColorRect" parent="Sprite2D"]
+offset_left = 5.0
+offset_top = -32.0
+offset_right = 20.0
+offset_bottom = -22.0
+color = Color(0.85, 0.15, 0.15, 1)
+
+[node name="SantaGlove" type="ColorRect" parent="Sprite2D"]
+offset_left = 16.0
+offset_top = -34.0
+offset_right = 26.0
+offset_bottom = -24.0
+
+[node name="GiftBag" type="ColorRect" parent="Sprite2D"]
+offset_left = 18.0
+offset_top = -25.0
+offset_right = 42.0
+offset_bottom = -2.0
+color = Color(0.6, 0.2, 0.15, 1)
+
+[node name="GiftBagTop" type="ColorRect" parent="Sprite2D"]
+offset_left = 20.0
+offset_top = -32.0
+offset_right = 40.0
+offset_bottom = -23.0
+color = Color(0.65, 0.25, 0.18, 1)
+
+[node name="GiftBagTie" type="ColorRect" parent="Sprite2D"]
+offset_left = 27.0
+offset_top = -28.0
+offset_right = 33.0
+offset_bottom = -23.0
+color = Color(0.9, 0.8, 0.2, 1)
+
+[node name="Gift1" type="ColorRect" parent="Sprite2D"]
+offset_left = 22.0
+offset_top = -18.0
+offset_right = 32.0
+offset_bottom = -8.0
+color = Color(0.2, 0.7, 0.3, 1)
+
+[node name="Gift2" type="ColorRect" parent="Sprite2D"]
+offset_left = 30.0
+offset_top = -22.0
+offset_right = 38.0
+offset_bottom = -14.0
+color = Color(0.3, 0.4, 0.9, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(6.5, -12)
+shape = SubResource("RectangleShape2D_sleigh")

@@ -1,0 +1,165 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/tree_grenade.gd" id="1_tree"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tree"]
+radius = 22.0
+
+[node name="TreeGrenade" type="RigidBody2D" groups=["tree_grenade"]]
+collision_layer = 8
+collision_mask = 17
+contact_monitor = true
+max_contacts_reported = 4
+script = ExtResource("1_tree")
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="Trunk" type="ColorRect" parent="Visual"]
+offset_left = -5.0
+offset_top = 8.0
+offset_right = 5.0
+offset_bottom = 22.0
+color = Color(0.45, 0.28, 0.15, 1)
+
+[node name="TrunkShade" type="ColorRect" parent="Visual"]
+offset_left = 0.0
+offset_top = 8.0
+offset_right = 5.0
+offset_bottom = 22.0
+color = Color(0.35, 0.2, 0.1, 1)
+
+[node name="Pot" type="ColorRect" parent="Visual"]
+offset_left = -10.0
+offset_top = 18.0
+offset_right = 10.0
+offset_bottom = 28.0
+color = Color(0.6, 0.25, 0.2, 1)
+
+[node name="PotRim" type="ColorRect" parent="Visual"]
+offset_left = -12.0
+offset_top = 16.0
+offset_right = 12.0
+offset_bottom = 20.0
+color = Color(0.7, 0.3, 0.25, 1)
+
+[node name="Layer1" type="ColorRect" parent="Visual"]
+offset_left = -22.0
+offset_top = 0.0
+offset_right = 22.0
+offset_bottom = 15.0
+color = Color(0.15, 0.5, 0.2, 1)
+
+[node name="Layer1Shade" type="ColorRect" parent="Visual"]
+offset_left = 5.0
+offset_top = 0.0
+offset_right = 22.0
+offset_bottom = 15.0
+color = Color(0.1, 0.4, 0.15, 1)
+
+[node name="Layer2" type="ColorRect" parent="Visual"]
+offset_left = -18.0
+offset_top = -12.0
+offset_right = 18.0
+offset_bottom = 3.0
+color = Color(0.18, 0.55, 0.22, 1)
+
+[node name="Layer2Shade" type="ColorRect" parent="Visual"]
+offset_left = 4.0
+offset_top = -12.0
+offset_right = 18.0
+offset_bottom = 3.0
+color = Color(0.12, 0.45, 0.18, 1)
+
+[node name="Layer3" type="ColorRect" parent="Visual"]
+offset_left = -14.0
+offset_top = -22.0
+offset_right = 14.0
+offset_bottom = -8.0
+color = Color(0.2, 0.58, 0.25, 1)
+
+[node name="Layer3Shade" type="ColorRect" parent="Visual"]
+offset_left = 3.0
+offset_top = -22.0
+offset_right = 14.0
+offset_bottom = -8.0
+color = Color(0.14, 0.48, 0.2, 1)
+
+[node name="Top" type="ColorRect" parent="Visual"]
+offset_left = -8.0
+offset_top = -32.0
+offset_right = 8.0
+offset_bottom = -18.0
+color = Color(0.22, 0.6, 0.28, 1)
+
+[node name="TopShade" type="ColorRect" parent="Visual"]
+offset_left = 2.0
+offset_top = -32.0
+offset_right = 8.0
+offset_bottom = -18.0
+color = Color(0.16, 0.5, 0.22, 1)
+
+[node name="Star" type="ColorRect" parent="Visual"]
+offset_left = -6.0
+offset_top = -42.0
+offset_right = 6.0
+offset_bottom = -30.0
+color = Color(1, 0.85, 0.1, 1)
+
+[node name="StarGlow" type="ColorRect" parent="Visual"]
+offset_left = -3.0
+offset_top = -39.0
+offset_right = 3.0
+offset_bottom = -33.0
+color = Color(1, 1, 0.6, 1)
+
+[node name="Ball1" type="ColorRect" parent="Visual"]
+offset_left = -15.0
+offset_top = 2.0
+offset_right = -9.0
+offset_bottom = 8.0
+color = Color(0.9, 0.2, 0.2, 1)
+
+[node name="Ball2" type="ColorRect" parent="Visual"]
+offset_left = 8.0
+offset_top = -5.0
+offset_right = 14.0
+offset_bottom = 1.0
+color = Color(0.2, 0.4, 0.9, 1)
+
+[node name="Ball3" type="ColorRect" parent="Visual"]
+offset_left = -10.0
+offset_top = -15.0
+offset_right = -4.0
+offset_bottom = -9.0
+color = Color(0.9, 0.8, 0.1, 1)
+
+[node name="Ball4" type="ColorRect" parent="Visual"]
+offset_left = 3.0
+offset_top = -20.0
+offset_right = 9.0
+offset_bottom = -14.0
+color = Color(0.9, 0.3, 0.6, 1)
+
+[node name="Garland1" type="ColorRect" parent="Visual"]
+offset_left = -12.0
+offset_top = -8.0
+offset_right = -8.0
+offset_bottom = -5.0
+color = Color(0.9, 0.75, 0.2, 1)
+
+[node name="Garland2" type="ColorRect" parent="Visual"]
+offset_left = -4.0
+offset_top = -6.0
+offset_right = 0.0
+offset_bottom = -3.0
+color = Color(0.9, 0.75, 0.2, 1)
+
+[node name="Garland3" type="ColorRect" parent="Visual"]
+offset_left = 4.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = -5.0
+color = Color(0.9, 0.75, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_tree")

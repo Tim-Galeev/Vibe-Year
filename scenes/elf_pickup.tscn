@@ -1,0 +1,276 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/elf_pickup.gd" id="1_elf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_elf"]
+size = Vector2(40, 60)
+
+[node name="ElfPickup" type="Area2D" groups=["pickup"]]
+collision_layer = 32
+collision_mask = 16
+script = ExtResource("1_elf")
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="Shadow" type="ColorRect" parent="Visual"]
+offset_left = -12.0
+offset_top = 30.0
+offset_right = 12.0
+offset_bottom = 35.0
+color = Color(0, 0, 0, 0.15)
+
+[node name="ShoeL" type="ColorRect" parent="Visual"]
+offset_left = -16.0
+offset_top = 22.0
+offset_right = -4.0
+offset_bottom = 32.0
+color = Color(0.18, 0.12, 0.08, 1)
+
+[node name="ShoeLTip" type="ColorRect" parent="Visual"]
+offset_left = -20.0
+offset_top = 24.0
+offset_right = -14.0
+offset_bottom = 30.0
+color = Color(0.18, 0.12, 0.08, 1)
+
+[node name="ShoeLBell" type="ColorRect" parent="Visual"]
+offset_left = -22.0
+offset_top = 22.0
+offset_right = -18.0
+offset_bottom = 26.0
+color = Color(0.9, 0.8, 0.2, 1)
+
+[node name="ShoeR" type="ColorRect" parent="Visual"]
+offset_left = 4.0
+offset_top = 22.0
+offset_right = 16.0
+offset_bottom = 32.0
+color = Color(0.18, 0.12, 0.08, 1)
+
+[node name="ShoeRTip" type="ColorRect" parent="Visual"]
+offset_left = 14.0
+offset_top = 24.0
+offset_right = 20.0
+offset_bottom = 30.0
+color = Color(0.18, 0.12, 0.08, 1)
+
+[node name="ShoeRBell" type="ColorRect" parent="Visual"]
+offset_left = 18.0
+offset_top = 22.0
+offset_right = 22.0
+offset_bottom = 26.0
+color = Color(0.9, 0.8, 0.2, 1)
+
+[node name="LegL" type="ColorRect" parent="Visual"]
+offset_left = -12.0
+offset_top = 8.0
+offset_right = -4.0
+offset_bottom = 24.0
+color = Color(0.2, 0.65, 0.25, 1)
+
+[node name="LegR" type="ColorRect" parent="Visual"]
+offset_left = 4.0
+offset_top = 8.0
+offset_right = 12.0
+offset_bottom = 24.0
+color = Color(0.18, 0.58, 0.22, 1)
+
+[node name="Body" type="ColorRect" parent="Visual"]
+offset_left = -14.0
+offset_top = -18.0
+offset_right = 14.0
+offset_bottom = 12.0
+color = Color(0.22, 0.68, 0.28, 1)
+
+[node name="BodyShade" type="ColorRect" parent="Visual"]
+offset_left = 4.0
+offset_top = -18.0
+offset_right = 14.0
+offset_bottom = 12.0
+color = Color(0.18, 0.58, 0.22, 1)
+
+[node name="Collar" type="ColorRect" parent="Visual"]
+offset_left = -16.0
+offset_top = -22.0
+offset_right = 16.0
+offset_bottom = -16.0
+color = Color(0.9, 0.15, 0.15, 1)
+
+[node name="Belt" type="ColorRect" parent="Visual"]
+offset_left = -15.0
+offset_top = -5.0
+offset_right = 15.0
+offset_bottom = 0.0
+color = Color(0.2, 0.15, 0.1, 1)
+
+[node name="Buckle" type="ColorRect" parent="Visual"]
+offset_left = -5.0
+offset_top = -6.0
+offset_right = 5.0
+offset_bottom = 1.0
+color = Color(0.95, 0.8, 0.2, 1)
+
+[node name="Button1" type="ColorRect" parent="Visual"]
+offset_left = -3.0
+offset_top = -15.0
+offset_right = 3.0
+offset_bottom = -10.0
+color = Color(0.9, 0.8, 0.2, 1)
+
+[node name="ArmL" type="ColorRect" parent="Visual"]
+offset_left = -22.0
+offset_top = -15.0
+offset_right = -12.0
+offset_bottom = -2.0
+color = Color(0.22, 0.68, 0.28, 1)
+
+[node name="ArmR" type="ColorRect" parent="Visual"]
+offset_left = 12.0
+offset_top = -15.0
+offset_right = 22.0
+offset_bottom = -2.0
+color = Color(0.18, 0.58, 0.22, 1)
+
+[node name="HandL" type="ColorRect" parent="Visual"]
+offset_left = -24.0
+offset_top = -5.0
+offset_right = -18.0
+offset_bottom = 2.0
+color = Color(0.95, 0.8, 0.7, 1)
+
+[node name="HandR" type="ColorRect" parent="Visual"]
+offset_left = 18.0
+offset_top = -5.0
+offset_right = 24.0
+offset_bottom = 2.0
+color = Color(0.9, 0.75, 0.65, 1)
+
+[node name="Head" type="ColorRect" parent="Visual"]
+offset_left = -12.0
+offset_top = -38.0
+offset_right = 12.0
+offset_bottom = -18.0
+color = Color(0.95, 0.8, 0.7, 1)
+
+[node name="HeadShade" type="ColorRect" parent="Visual"]
+offset_left = 4.0
+offset_top = -38.0
+offset_right = 12.0
+offset_bottom = -18.0
+color = Color(0.9, 0.75, 0.65, 1)
+
+[node name="EarL" type="ColorRect" parent="Visual"]
+offset_left = -20.0
+offset_top = -34.0
+offset_right = -10.0
+offset_bottom = -26.0
+color = Color(0.95, 0.8, 0.7, 1)
+
+[node name="EarLTip" type="ColorRect" parent="Visual"]
+offset_left = -24.0
+offset_top = -32.0
+offset_right = -18.0
+offset_bottom = -28.0
+color = Color(0.95, 0.8, 0.7, 1)
+
+[node name="EarR" type="ColorRect" parent="Visual"]
+offset_left = 10.0
+offset_top = -34.0
+offset_right = 20.0
+offset_bottom = -26.0
+color = Color(0.9, 0.75, 0.65, 1)
+
+[node name="EarRTip" type="ColorRect" parent="Visual"]
+offset_left = 18.0
+offset_top = -32.0
+offset_right = 24.0
+offset_bottom = -28.0
+color = Color(0.9, 0.75, 0.65, 1)
+
+[node name="EyeL" type="ColorRect" parent="Visual"]
+offset_left = -8.0
+offset_top = -34.0
+offset_right = -3.0
+offset_bottom = -28.0
+color = Color(0.1, 0.1, 0.1, 1)
+
+[node name="EyeLHighlight" type="ColorRect" parent="Visual"]
+offset_left = -7.0
+offset_top = -33.0
+offset_right = -5.0
+offset_bottom = -31.0
+color = Color(1, 1, 1, 1)
+
+[node name="EyeR" type="ColorRect" parent="Visual"]
+offset_left = 3.0
+offset_top = -34.0
+offset_right = 8.0
+offset_bottom = -28.0
+color = Color(0.1, 0.1, 0.1, 1)
+
+[node name="EyeRHighlight" type="ColorRect" parent="Visual"]
+offset_left = 4.0
+offset_top = -33.0
+offset_right = 6.0
+offset_bottom = -31.0
+color = Color(1, 1, 1, 1)
+
+[node name="Nose" type="ColorRect" parent="Visual"]
+offset_left = -2.0
+offset_top = -28.0
+offset_right = 2.0
+offset_bottom = -24.0
+color = Color(0.9, 0.6, 0.5, 1)
+
+[node name="Smile" type="ColorRect" parent="Visual"]
+offset_left = -5.0
+offset_top = -23.0
+offset_right = 5.0
+offset_bottom = -20.0
+color = Color(0.85, 0.4, 0.4, 1)
+
+[node name="Cheeks" type="ColorRect" parent="Visual"]
+offset_left = -10.0
+offset_top = -26.0
+offset_right = -6.0
+offset_bottom = -22.0
+color = Color(1, 0.6, 0.6, 0.4)
+
+[node name="Hat" type="ColorRect" parent="Visual"]
+offset_left = -14.0
+offset_top = -52.0
+offset_right = 14.0
+offset_bottom = -36.0
+color = Color(0.85, 0.15, 0.15, 1)
+
+[node name="HatShade" type="ColorRect" parent="Visual"]
+offset_left = 4.0
+offset_top = -52.0
+offset_right = 14.0
+offset_bottom = -36.0
+color = Color(0.7, 0.1, 0.1, 1)
+
+[node name="HatTip" type="ColorRect" parent="Visual"]
+offset_left = 10.0
+offset_top = -62.0
+offset_right = 22.0
+offset_bottom = -50.0
+color = Color(0.85, 0.15, 0.15, 1)
+
+[node name="HatPom" type="ColorRect" parent="Visual"]
+offset_left = 18.0
+offset_top = -68.0
+offset_right = 28.0
+offset_bottom = -58.0
+color = Color(1, 1, 1, 1)
+
+[node name="HatFur" type="ColorRect" parent="Visual"]
+offset_left = -16.0
+offset_top = -40.0
+offset_right = 16.0
+offset_bottom = -35.0
+color = Color(1, 1, 1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -10)
+shape = SubResource("RectangleShape2D_elf")

@@ -1,0 +1,157 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/mandarin_trampoline.gd" id="1_trampoline"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tramp"]
+size = Vector2(90, 45)
+
+[node name="MandarinTrampoline" type="Area2D" groups=["trampoline"]]
+collision_layer = 64
+collision_mask = 2
+script = ExtResource("1_trampoline")
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="Shadow" type="ColorRect" parent="Visual"]
+offset_left = -42.0
+offset_top = 8.0
+offset_right = 42.0
+offset_bottom = 18.0
+color = Color(0, 0, 0, 0.2)
+
+[node name="Basket" type="ColorRect" parent="Visual"]
+offset_left = -45.0
+offset_top = -5.0
+offset_right = 45.0
+offset_bottom = 15.0
+color = Color(0.55, 0.35, 0.15, 1)
+
+[node name="BasketRim" type="ColorRect" parent="Visual"]
+offset_left = -48.0
+offset_top = -8.0
+offset_right = 48.0
+offset_bottom = -2.0
+color = Color(0.65, 0.42, 0.2, 1)
+
+[node name="BasketWeave1" type="ColorRect" parent="Visual"]
+offset_left = -35.0
+offset_top = -3.0
+offset_right = -32.0
+offset_bottom = 12.0
+color = Color(0.45, 0.28, 0.1, 1)
+
+[node name="BasketWeave2" type="ColorRect" parent="Visual"]
+offset_left = -15.0
+offset_top = -3.0
+offset_right = -12.0
+offset_bottom = 12.0
+color = Color(0.45, 0.28, 0.1, 1)
+
+[node name="BasketWeave3" type="ColorRect" parent="Visual"]
+offset_left = 12.0
+offset_top = -3.0
+offset_right = 15.0
+offset_bottom = 12.0
+color = Color(0.45, 0.28, 0.1, 1)
+
+[node name="BasketWeave4" type="ColorRect" parent="Visual"]
+offset_left = 32.0
+offset_top = -3.0
+offset_right = 35.0
+offset_bottom = 12.0
+color = Color(0.45, 0.28, 0.1, 1)
+
+[node name="Mandarin1" type="ColorRect" parent="Visual"]
+offset_left = -35.0
+offset_top = -25.0
+offset_right = -15.0
+offset_bottom = -5.0
+color = Color(1, 0.55, 0.05, 1)
+
+[node name="Mandarin1Highlight" type="ColorRect" parent="Visual"]
+offset_left = -32.0
+offset_top = -22.0
+offset_right = -22.0
+offset_bottom = -14.0
+color = Color(1, 0.75, 0.3, 0.5)
+
+[node name="Mandarin1Leaf" type="ColorRect" parent="Visual"]
+offset_left = -27.0
+offset_top = -30.0
+offset_right = -21.0
+offset_bottom = -24.0
+color = Color(0.3, 0.6, 0.2, 1)
+
+[node name="Mandarin2" type="ColorRect" parent="Visual"]
+offset_left = -12.0
+offset_top = -28.0
+offset_right = 12.0
+offset_bottom = -4.0
+color = Color(1, 0.6, 0.1, 1)
+
+[node name="Mandarin2Highlight" type="ColorRect" parent="Visual"]
+offset_left = -8.0
+offset_top = -24.0
+offset_right = 2.0
+offset_bottom = -14.0
+color = Color(1, 0.8, 0.35, 0.5)
+
+[node name="Mandarin2Leaf" type="ColorRect" parent="Visual"]
+offset_left = -2.0
+offset_top = -34.0
+offset_right = 4.0
+offset_bottom = -27.0
+color = Color(0.25, 0.55, 0.15, 1)
+
+[node name="Mandarin3" type="ColorRect" parent="Visual"]
+offset_left = 15.0
+offset_top = -25.0
+offset_right = 35.0
+offset_bottom = -5.0
+color = Color(1, 0.5, 0.0, 1)
+
+[node name="Mandarin3Highlight" type="ColorRect" parent="Visual"]
+offset_left = 18.0
+offset_top = -22.0
+offset_right = 28.0
+offset_bottom = -14.0
+color = Color(1, 0.7, 0.25, 0.5)
+
+[node name="Mandarin3Leaf" type="ColorRect" parent="Visual"]
+offset_left = 23.0
+offset_top = -30.0
+offset_right = 29.0
+offset_bottom = -24.0
+color = Color(0.35, 0.65, 0.25, 1)
+
+[node name="Mandarin4" type="ColorRect" parent="Visual"]
+offset_left = -22.0
+offset_top = -42.0
+offset_right = -4.0
+offset_bottom = -24.0
+color = Color(1, 0.58, 0.08, 1)
+
+[node name="Mandarin4Highlight" type="ColorRect" parent="Visual"]
+offset_left = -19.0
+offset_top = -39.0
+offset_right = -11.0
+offset_bottom = -32.0
+color = Color(1, 0.78, 0.32, 0.5)
+
+[node name="Mandarin5" type="ColorRect" parent="Visual"]
+offset_left = 4.0
+offset_top = -42.0
+offset_right = 22.0
+offset_bottom = -24.0
+color = Color(1, 0.52, 0.02, 1)
+
+[node name="Mandarin5Highlight" type="ColorRect" parent="Visual"]
+offset_left = 7.0
+offset_top = -39.0
+offset_right = 15.0
+offset_bottom = -32.0
+color = Color(1, 0.72, 0.28, 0.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -18)
+shape = SubResource("RectangleShape2D_tramp")

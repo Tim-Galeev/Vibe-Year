@@ -1,0 +1,317 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/background.gd" id="1_bg"]
+[ext_resource type="Script" path="res://scripts/roof_spawner.gd" id="2_spawner"]
+[ext_resource type="PackedScene" path="res://scenes/santa_sleigh.tscn" id="3_sleigh"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="4_hud"]
+
+[node name="Game" type="Node2D"]
+
+[node name="Background" type="Node2D" parent="."]
+script = ExtResource("1_bg")
+
+[node name="Sky" type="ColorRect" parent="Background"]
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0.05, 0.08, 0.18, 1)
+
+[node name="Stars" type="Node2D" parent="Background"]
+
+[node name="Moon" type="ColorRect" parent="Background"]
+offset_left = 1050.0
+offset_top = 80.0
+offset_right = 1150.0
+offset_bottom = 180.0
+color = Color(1, 0.97, 0.85, 1)
+
+[node name="MoonGlow" type="ColorRect" parent="Background"]
+offset_left = 1030.0
+offset_top = 60.0
+offset_right = 1170.0
+offset_bottom = 200.0
+color = Color(1, 0.97, 0.85, 0.15)
+
+[node name="RoofSpawner" type="Node2D" parent="."]
+script = ExtResource("2_spawner")
+
+[node name="SantaSleigh" parent="." instance=ExtResource("3_sleigh")]
+position = Vector2(200, 200)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("4_hud")
+
+[node name="CenterHUD" type="HBoxContainer" parent="HUD"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -350.0
+offset_top = 8.0
+offset_right = 350.0
+offset_bottom = 70.0
+grow_horizontal = 2
+theme_override_constants/separation = 25
+alignment = 1
+
+[node name="ChampagneContainer" type="HBoxContainer" parent="HUD/CenterHUD"]
+layout_mode = 2
+
+[node name="Icon" type="Label" parent="HUD/CenterHUD/ChampagneContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "🍾"
+
+[node name="Label" type="Label" parent="HUD/CenterHUD/ChampagneContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 1, 0.8, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 28
+text = "0"
+
+[node name="TreeContainer" type="VBoxContainer" parent="HUD/CenterHUD"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Top" type="HBoxContainer" parent="HUD/CenterHUD/TreeContainer"]
+layout_mode = 2
+
+[node name="Icon" type="Label" parent="HUD/CenterHUD/TreeContainer/Top"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "🎄"
+
+[node name="Label" type="Label" parent="HUD/CenterHUD/TreeContainer/Top"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 1, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 28
+text = "1"
+
+[node name="TreeProgress" type="ProgressBar" parent="HUD/CenterHUD/TreeContainer"]
+custom_minimum_size = Vector2(60, 8)
+layout_mode = 2
+theme_override_styles/fill = null
+max_value = 100.0
+value = 0.0
+show_percentage = false
+
+[node name="ScoreContainer" type="HBoxContainer" parent="HUD/CenterHUD"]
+layout_mode = 2
+
+[node name="ScoreLabel" type="Label" parent="HUD/CenterHUD/ScoreContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 38
+text = "0"
+
+[node name="GiftsContainer" type="HBoxContainer" parent="HUD/CenterHUD"]
+layout_mode = 2
+
+[node name="Icon" type="Label" parent="HUD/CenterHUD/GiftsContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "🎁"
+
+[node name="Label" type="Label" parent="HUD/CenterHUD/GiftsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 28
+text = "20"
+
+[node name="LivesContainer" type="HBoxContainer" parent="HUD/CenterHUD"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HUD/CenterHUD/LivesContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 24
+text = "❤️❤️❤️"
+
+[node name="BuffsLabel" type="Label" parent="HUD"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 65.0
+offset_right = 200.0
+offset_bottom = 90.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.95, 0.4, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 16
+text = "⭐ БОНУС"
+horizontal_alignment = 1
+
+[node name="AnnouncementLabel" type="Label" parent="HUD"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -80.0
+offset_right = 200.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 48
+text = "ЗВЕЗДА!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SoundButtons" type="HBoxContainer" parent="HUD"]
+visible = false
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -100.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 45.0
+grow_horizontal = 0
+
+[node name="MusicToggle" type="Button" parent="HUD/SoundButtons"]
+layout_mode = 2
+text = "🎵"
+
+[node name="SFXToggle" type="Button" parent="HUD/SoundButtons"]
+layout_mode = 2
+text = "🔊"
+
+[node name="ControlsHint" type="Label" parent="HUD"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -25.0
+offset_right = 300.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 0.5)
+theme_override_font_sizes/font_size = 11
+text = "WASD - движение | Клик/Пробел - бросок | E - ускорение | Q - ёлка"
+horizontal_alignment = 1
+
+[node name="StartPanel" type="Panel" parent="HUD"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -200.0
+offset_right = 280.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/StartPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Title" type="Label" parent="HUD/StartPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 32
+text = "🎅 Новогодний Заброс 🎅"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="HUD/StartPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Бросай подарки в дымоходы!"
+horizontal_alignment = 1
+
+[node name="LeaderboardStart" type="VBoxContainer" parent="HUD/StartPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HUD/StartPanel/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="MusicButton" type="Button" parent="HUD/StartPanel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "🎵 ВКЛ"
+
+[node name="SFXButton" type="Button" parent="HUD/StartPanel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "🔊 ВКЛ"
+
+[node name="StartButton" type="Button" parent="HUD/StartPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "🎄 ИГРАТЬ 🎄"
+
+[node name="GameOverPanel" type="Panel" parent="HUD"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -180.0
+offset_right = 200.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/GameOverPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="GameOverLabel" type="Label" parent="HUD/GameOverPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 28
+text = "💔 ИГРА ОКОНЧЕНА 💔"
+horizontal_alignment = 1
+
+[node name="FinalScoreLabel" type="Label" parent="HUD/GameOverPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Счёт: 0"
+horizontal_alignment = 1
+
+[node name="NameInput" type="LineEdit" parent="HUD/GameOverPanel/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Введите имя..."
+alignment = 1
+max_length = 15
+
+[node name="SaveScoreButton" type="Button" parent="HUD/GameOverPanel/VBoxContainer"]
+layout_mode = 2
+text = "Сохранить рекорд"
+
+[node name="LeaderboardContainer" type="VBoxContainer" parent="HUD/GameOverPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="RestartButton" type="Button" parent="HUD/GameOverPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "🔄 Заново"

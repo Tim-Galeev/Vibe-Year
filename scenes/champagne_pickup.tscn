@@ -1,0 +1,129 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/champagne_pickup.gd" id="1_champagne"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_champ"]
+size = Vector2(40, 75)
+
+[node name="ChampagnePickup" type="Area2D" groups=["pickup"]]
+collision_layer = 32
+collision_mask = 16
+script = ExtResource("1_champagne")
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="Shadow" type="ColorRect" parent="Visual"]
+offset_left = -10.0
+offset_top = 18.0
+offset_right = 12.0
+offset_bottom = 24.0
+color = Color(0, 0, 0, 0.15)
+
+[node name="Bottle" type="ColorRect" parent="Visual"]
+offset_left = -12.0
+offset_top = -30.0
+offset_right = 12.0
+offset_bottom = 20.0
+color = Color(0.12, 0.35, 0.15, 1)
+
+[node name="BottleShade" type="ColorRect" parent="Visual"]
+offset_left = 4.0
+offset_top = -30.0
+offset_right = 12.0
+offset_bottom = 20.0
+color = Color(0.08, 0.28, 0.1, 1)
+
+[node name="BottleHighlight" type="ColorRect" parent="Visual"]
+offset_left = -10.0
+offset_top = -25.0
+offset_right = -6.0
+offset_bottom = 10.0
+color = Color(0.25, 0.5, 0.3, 0.4)
+
+[node name="Neck" type="ColorRect" parent="Visual"]
+offset_left = -7.0
+offset_top = -50.0
+offset_right = 7.0
+offset_bottom = -28.0
+color = Color(0.12, 0.35, 0.15, 1)
+
+[node name="NeckShade" type="ColorRect" parent="Visual"]
+offset_left = 2.0
+offset_top = -50.0
+offset_right = 7.0
+offset_bottom = -28.0
+color = Color(0.08, 0.28, 0.1, 1)
+
+[node name="Foil" type="ColorRect" parent="Visual"]
+offset_left = -9.0
+offset_top = -62.0
+offset_right = 9.0
+offset_bottom = -48.0
+color = Color(0.95, 0.8, 0.2, 1)
+
+[node name="FoilTop" type="ColorRect" parent="Visual"]
+offset_left = -7.0
+offset_top = -68.0
+offset_right = 7.0
+offset_bottom = -60.0
+color = Color(1, 0.85, 0.25, 1)
+
+[node name="FoilHighlight" type="ColorRect" parent="Visual"]
+offset_left = -7.0
+offset_top = -60.0
+offset_right = -3.0
+offset_bottom = -50.0
+color = Color(1, 0.95, 0.5, 0.5)
+
+[node name="Label" type="ColorRect" parent="Visual"]
+offset_left = -11.0
+offset_top = -20.0
+offset_right = 11.0
+offset_bottom = 5.0
+color = Color(0.95, 0.92, 0.85, 1)
+
+[node name="LabelText1" type="ColorRect" parent="Visual"]
+offset_left = -8.0
+offset_top = -15.0
+offset_right = 8.0
+offset_bottom = -12.0
+color = Color(0.8, 0.6, 0.2, 1)
+
+[node name="LabelText2" type="ColorRect" parent="Visual"]
+offset_left = -6.0
+offset_top = -8.0
+offset_right = 6.0
+offset_bottom = -5.0
+color = Color(0.7, 0.5, 0.15, 1)
+
+[node name="LabelStar" type="ColorRect" parent="Visual"]
+offset_left = -4.0
+offset_top = -2.0
+offset_right = 4.0
+offset_bottom = 3.0
+color = Color(0.9, 0.75, 0.2, 1)
+
+[node name="Sparkle1" type="ColorRect" parent="Visual"]
+offset_left = -22.0
+offset_top = -55.0
+offset_right = -18.0
+offset_bottom = -51.0
+color = Color(1, 1, 0.9, 0.9)
+
+[node name="Sparkle2" type="ColorRect" parent="Visual"]
+offset_left = 18.0
+offset_top = -40.0
+offset_right = 22.0
+offset_bottom = -36.0
+color = Color(1, 1, 0.9, 0.8)
+
+[node name="Sparkle3" type="ColorRect" parent="Visual"]
+offset_left = -20.0
+offset_top = -10.0
+offset_right = -17.0
+offset_bottom = -7.0
+color = Color(1, 1, 0.9, 0.7)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -20)
+shape = SubResource("RectangleShape2D_champ")

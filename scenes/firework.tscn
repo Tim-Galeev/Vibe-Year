@@ -1,0 +1,53 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/firework.gd" id="1_firework"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_firework"]
+radius = 50.0
+
+[node name="Firework" type="Area2D" groups=["hazard"]]
+collision_layer = 64
+collision_mask = 16
+script = ExtResource("1_firework")
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="Rocket" type="ColorRect" parent="Visual"]
+offset_left = -4.0
+offset_top = -15.0
+offset_right = 4.0
+offset_bottom = 15.0
+color = Color(0.6, 0.15, 0.15, 1)
+
+[node name="Tip" type="ColorRect" parent="Visual"]
+offset_left = -6.0
+offset_top = -22.0
+offset_right = 6.0
+offset_bottom = -12.0
+color = Color(1, 0.3, 0.3, 1)
+
+[node name="Spark" type="ColorRect" parent="Visual"]
+offset_left = -3.0
+offset_top = 15.0
+offset_right = 3.0
+offset_bottom = 25.0
+color = Color(1, 0.9, 0.3, 1)
+
+[node name="Explosion" type="ColorRect" parent="Visual"]
+visible = false
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(1, 0.8, 0.4, 0.8)
+
+[node name="Smoke" type="ColorRect" parent="Visual"]
+visible = false
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+color = Color(0.5, 0.5, 0.5, 0.4)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_firework")

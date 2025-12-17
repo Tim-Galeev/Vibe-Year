@@ -1,0 +1,108 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/gingerbread_pickup.gd" id="1_ginger"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ginger"]
+size = Vector2(35, 50)
+
+[node name="GingerbreadPickup" type="Area2D" groups=["pickup"]]
+collision_layer = 32
+collision_mask = 16
+script = ExtResource("1_ginger")
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="Head" type="ColorRect" parent="Visual"]
+offset_left = -12.0
+offset_top = -35.0
+offset_right = 12.0
+offset_bottom = -15.0
+color = Color(0.8, 0.55, 0.3, 1)
+
+[node name="Body" type="ColorRect" parent="Visual"]
+offset_left = -14.0
+offset_top = -18.0
+offset_right = 14.0
+offset_bottom = 8.0
+color = Color(0.8, 0.55, 0.3, 1)
+
+[node name="ArmL" type="ColorRect" parent="Visual"]
+offset_left = -22.0
+offset_top = -15.0
+offset_right = -12.0
+offset_bottom = -5.0
+color = Color(0.8, 0.55, 0.3, 1)
+
+[node name="ArmR" type="ColorRect" parent="Visual"]
+offset_left = 12.0
+offset_top = -15.0
+offset_right = 22.0
+offset_bottom = -5.0
+color = Color(0.8, 0.55, 0.3, 1)
+
+[node name="LegL" type="ColorRect" parent="Visual"]
+offset_left = -12.0
+offset_top = 5.0
+offset_right = -2.0
+offset_bottom = 20.0
+color = Color(0.8, 0.55, 0.3, 1)
+
+[node name="LegR" type="ColorRect" parent="Visual"]
+offset_left = 2.0
+offset_top = 5.0
+offset_right = 12.0
+offset_bottom = 20.0
+color = Color(0.8, 0.55, 0.3, 1)
+
+[node name="EyeL" type="ColorRect" parent="Visual"]
+offset_left = -8.0
+offset_top = -32.0
+offset_right = -4.0
+offset_bottom = -28.0
+color = Color(0.2, 0.15, 0.1, 1)
+
+[node name="EyeR" type="ColorRect" parent="Visual"]
+offset_left = 4.0
+offset_top = -32.0
+offset_right = 8.0
+offset_bottom = -28.0
+color = Color(0.2, 0.15, 0.1, 1)
+
+[node name="Smile" type="ColorRect" parent="Visual"]
+offset_left = -5.0
+offset_top = -24.0
+offset_right = 5.0
+offset_bottom = -21.0
+color = Color(0.9, 0.3, 0.3, 1)
+
+[node name="Button1" type="ColorRect" parent="Visual"]
+offset_left = -3.0
+offset_top = -12.0
+offset_right = 3.0
+offset_bottom = -6.0
+color = Color(0.9, 0.2, 0.2, 1)
+
+[node name="Button2" type="ColorRect" parent="Visual"]
+offset_left = -3.0
+offset_top = -3.0
+offset_right = 3.0
+offset_bottom = 3.0
+color = Color(0.2, 0.7, 0.2, 1)
+
+[node name="Icing1" type="ColorRect" parent="Visual"]
+offset_left = -20.0
+offset_top = -8.0
+offset_right = -14.0
+offset_bottom = -6.0
+color = Color(1, 1, 1, 1)
+
+[node name="Icing2" type="ColorRect" parent="Visual"]
+offset_left = 14.0
+offset_top = -8.0
+offset_right = 20.0
+offset_bottom = -6.0
+color = Color(1, 1, 1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_ginger")

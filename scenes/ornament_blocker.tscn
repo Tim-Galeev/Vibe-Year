@@ -1,0 +1,86 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ornament_blocker.gd" id="1_blocker"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_blocker"]
+radius = 20.0
+
+[node name="OrnamentBlocker" type="StaticBody2D" groups=["blocker"]]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_blocker")
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="BallShadow" type="ColorRect" parent="Visual"]
+offset_left = -16.0
+offset_top = -14.0
+offset_right = 18.0
+offset_bottom = 20.0
+color = Color(0, 0, 0, 0.2)
+
+[node name="Ball" type="ColorRect" parent="Visual"]
+offset_left = -18.0
+offset_top = -18.0
+offset_right = 18.0
+offset_bottom = 18.0
+color = Color(0.9, 0.15, 0.15, 1)
+
+[node name="BallInner" type="ColorRect" parent="Visual"]
+offset_left = -14.0
+offset_top = -14.0
+offset_right = 14.0
+offset_bottom = 14.0
+color = Color(0.85, 0.12, 0.12, 1)
+
+[node name="Highlight1" type="ColorRect" parent="Visual"]
+offset_left = -12.0
+offset_top = -12.0
+offset_right = -4.0
+offset_bottom = -4.0
+color = Color(1, 0.5, 0.5, 0.5)
+
+[node name="Highlight2" type="ColorRect" parent="Visual"]
+offset_left = -8.0
+offset_top = -8.0
+offset_right = -2.0
+offset_bottom = -2.0
+color = Color(1, 0.7, 0.7, 0.4)
+
+[node name="Cap" type="ColorRect" parent="Visual"]
+offset_left = -8.0
+offset_top = -26.0
+offset_right = 8.0
+offset_bottom = -16.0
+color = Color(0.85, 0.75, 0.2, 1)
+
+[node name="CapTop" type="ColorRect" parent="Visual"]
+offset_left = -6.0
+offset_top = -30.0
+offset_right = 6.0
+offset_bottom = -24.0
+color = Color(0.9, 0.8, 0.25, 1)
+
+[node name="Ring" type="ColorRect" parent="Visual"]
+offset_left = -3.0
+offset_top = -34.0
+offset_right = 3.0
+offset_bottom = -28.0
+color = Color(0.7, 0.65, 0.15, 1)
+
+[node name="Stripe1" type="ColorRect" parent="Visual"]
+offset_left = -18.0
+offset_top = -2.0
+offset_right = 18.0
+offset_bottom = 2.0
+color = Color(0.95, 0.85, 0.2, 0.6)
+
+[node name="Sparkle" type="ColorRect" parent="Visual"]
+offset_left = 8.0
+offset_top = 6.0
+offset_right = 12.0
+offset_bottom = 10.0
+color = Color(1, 1, 1, 0.6)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_blocker")

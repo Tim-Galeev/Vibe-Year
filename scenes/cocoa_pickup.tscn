@@ -1,0 +1,96 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/cocoa_pickup.gd" id="1_cocoa"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cocoa"]
+radius = 22.0
+
+[node name="CocoaPickup" type="Area2D" groups=["pickup"]]
+collision_layer = 32
+collision_mask = 16
+script = ExtResource("1_cocoa")
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="Cup" type="ColorRect" parent="Visual"]
+offset_left = -14.0
+offset_top = -8.0
+offset_right = 14.0
+offset_bottom = 16.0
+color = Color(0.95, 0.95, 0.92, 1)
+
+[node name="CupInner" type="ColorRect" parent="Visual"]
+offset_left = -10.0
+offset_top = -4.0
+offset_right = 10.0
+offset_bottom = 12.0
+color = Color(0.35, 0.2, 0.12, 1)
+
+[node name="Handle" type="ColorRect" parent="Visual"]
+offset_left = 14.0
+offset_top = -2.0
+offset_right = 22.0
+offset_bottom = 10.0
+color = Color(0.95, 0.95, 0.92, 1)
+
+[node name="HandleHole" type="ColorRect" parent="Visual"]
+offset_left = 16.0
+offset_top = 1.0
+offset_right = 20.0
+offset_bottom = 7.0
+color = Color(0.05, 0.08, 0.18, 1)
+
+[node name="Foam1" type="ColorRect" parent="Visual"]
+offset_left = -8.0
+offset_top = -7.0
+offset_right = -2.0
+offset_bottom = -2.0
+color = Color(1, 0.98, 0.95, 1)
+
+[node name="Foam2" type="ColorRect" parent="Visual"]
+offset_left = 0.0
+offset_top = -9.0
+offset_right = 7.0
+offset_bottom = -3.0
+color = Color(1, 0.98, 0.95, 1)
+
+[node name="Foam3" type="ColorRect" parent="Visual"]
+offset_left = -4.0
+offset_top = -5.0
+offset_right = 4.0
+offset_bottom = 0.0
+color = Color(0.98, 0.95, 0.9, 1)
+
+[node name="Steam1" type="ColorRect" parent="Visual"]
+offset_left = -6.0
+offset_top = -18.0
+offset_right = -3.0
+offset_bottom = -10.0
+color = Color(1, 1, 1, 0.4)
+
+[node name="Steam2" type="ColorRect" parent="Visual"]
+offset_left = 2.0
+offset_top = -22.0
+offset_right = 5.0
+offset_bottom = -12.0
+color = Color(1, 1, 1, 0.3)
+
+[node name="Steam3" type="ColorRect" parent="Visual"]
+offset_left = -2.0
+offset_top = -15.0
+offset_right = 1.0
+offset_bottom = -8.0
+color = Color(1, 1, 1, 0.35)
+
+[node name="Heart" type="Label" parent="Visual"]
+offset_left = -10.0
+offset_top = -30.0
+offset_right = 10.0
+offset_bottom = -10.0
+theme_override_colors/font_color = Color(1, 0.4, 0.4, 0.8)
+theme_override_font_sizes/font_size = 14
+text = "♥"
+horizontal_alignment = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_cocoa")

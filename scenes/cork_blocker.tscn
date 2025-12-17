@@ -1,0 +1,72 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/cork_blocker.gd" id="1_cork"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cork"]
+size = Vector2(35, 45)
+
+[node name="CorkBlocker" type="StaticBody2D" groups=["blocker"]]
+collision_layer = 32
+collision_mask = 2
+script = ExtResource("1_cork")
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="CorkBody" type="ColorRect" parent="Visual"]
+offset_left = -14.0
+offset_top = -20.0
+offset_right = 14.0
+offset_bottom = 25.0
+color = Color(0.6, 0.45, 0.25, 1)
+
+[node name="CorkTop" type="ColorRect" parent="Visual"]
+offset_left = -18.0
+offset_top = -28.0
+offset_right = 18.0
+offset_bottom = -18.0
+color = Color(0.55, 0.4, 0.2, 1)
+
+[node name="CorkRing1" type="ColorRect" parent="Visual"]
+offset_left = -16.0
+offset_top = -10.0
+offset_right = 16.0
+offset_bottom = -6.0
+color = Color(0.5, 0.35, 0.15, 1)
+
+[node name="CorkRing2" type="ColorRect" parent="Visual"]
+offset_left = -16.0
+offset_top = 5.0
+offset_right = 16.0
+offset_bottom = 9.0
+color = Color(0.5, 0.35, 0.15, 1)
+
+[node name="Wire1" type="ColorRect" parent="Visual"]
+offset_left = -20.0
+offset_top = -25.0
+offset_right = -17.0
+offset_bottom = 0.0
+color = Color(0.7, 0.65, 0.5, 1)
+
+[node name="Wire2" type="ColorRect" parent="Visual"]
+offset_left = 17.0
+offset_top = -25.0
+offset_right = 20.0
+offset_bottom = 0.0
+color = Color(0.7, 0.65, 0.5, 1)
+
+[node name="WireTop" type="ColorRect" parent="Visual"]
+offset_left = -20.0
+offset_top = -30.0
+offset_right = 20.0
+offset_bottom = -26.0
+color = Color(0.7, 0.65, 0.5, 1)
+
+[node name="Highlight" type="ColorRect" parent="Visual"]
+offset_left = -10.0
+offset_top = -15.0
+offset_right = -4.0
+offset_bottom = 15.0
+color = Color(0.75, 0.6, 0.4, 0.4)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_cork")
