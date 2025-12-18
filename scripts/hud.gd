@@ -28,6 +28,8 @@ extends CanvasLayer
 @onready var leaderboard_start = $StartPanel/VBoxContainer/LeaderboardStart
 
 @onready var sound_buttons = $SoundButtons
+@onready var music_toggle = $SoundButtons/MusicToggle
+@onready var sfx_toggle = $SoundButtons/SFXToggle
 @onready var touch_controls = $TouchControls
 @onready var champagne_button = $TouchControls/ChampagneButton
 @onready var tree_button = $TouchControls/TreeButton
@@ -36,6 +38,7 @@ var popup_container: Node2D
 var menu_buttons: Array = []
 var current_button_index: int = 0
 var _joy_pressed: bool = false
+var _game_over_reason: String = ""
 
 func _ready():
 	# Сигналы GameManager
@@ -59,6 +62,7 @@ func _ready():
 	GameManager.big_announcement.connect(_on_big_announcement)
 	GameManager.tree_appeared_on_sleigh.connect(_on_tree_appeared)
 	GameManager.combo_changed.connect(_on_combo_changed)
+	GameManager.game_over_reason.connect(_on_game_over_reason)
 	
 	popup_container = Node2D.new()
 	popup_container.z_index = 100
@@ -94,6 +98,12 @@ func _connect_buttons():
 		champagne_button.pressed.connect(_on_champagne_touch)
 	if tree_button:
 		tree_button.pressed.connect(_on_tree_touch)
+	
+	# Кнопки звука в игре
+	if music_toggle:
+		music_toggle.pressed.connect(_on_music_toggle)
+	if sfx_toggle:
+		sfx_toggle.pressed.connect(_on_sfx_toggle)
 
 func _process(_delta):
 	if GameManager.is_game_running:
@@ -158,6 +168,12 @@ func _update_sound_buttons():
 		mb.text = "🎵 ВКЛ" if SoundManager.music_enabled else "🎵 ВЫКЛ"
 	if sb:
 		sb.text = "🔊 ВКЛ" if SoundManager.sfx_enabled else "🔊 ВЫКЛ"
+	
+	# Кнопки в игре
+	if music_toggle:
+		music_toggle.text = "🎵" if SoundManager.music_enabled else "🎵❌"
+	if sfx_toggle:
+		sfx_toggle.text = "🔊" if SoundManager.sfx_enabled else "🔊❌"
 
 func _on_music_toggle():
 	SoundManager.toggle_music()
@@ -207,12 +223,12 @@ func _on_tree_progress(progress: float):
 	if tree_progress:
 		tree_progress.value = progress * 100
 
-func _on_combo_changed(combo: int, multiplier: float):
+func _on_combo_changed(combo: int, _multiplier: float):
 	if not combo_label:
 		return
 	
-	if combo > 0:
-		combo_label.text = "🔥 x%d (%.1fx)" % [combo, multiplier]
+	if combo >= 2:
+		combo_label.text = "🔥 x%d" % combo
 		combo_label.visible = true
 		
 		# Анимация при увеличении комбо
@@ -221,11 +237,11 @@ func _on_combo_changed(combo: int, multiplier: float):
 		tween.tween_property(combo_label, "scale", Vector2(1.0, 1.0), 0.1)
 		
 		# Цвет в зависимости от комбо
-		if multiplier >= 2.5:
+		if combo >= 15:
 			combo_label.add_theme_color_override("font_color", Color(1, 0.3, 0.1))  # Красный
-		elif multiplier >= 2.0:
+		elif combo >= 10:
 			combo_label.add_theme_color_override("font_color", Color(1, 0.6, 0.1))  # Оранжевый
-		elif multiplier >= 1.5:
+		elif combo >= 5:
 			combo_label.add_theme_color_override("font_color", Color(1, 0.9, 0.2))  # Жёлтый
 		else:
 			combo_label.add_theme_color_override("font_color", Color(0.8, 1, 0.3))  # Зелёный
@@ -354,11 +370,17 @@ func _on_big_announcement(text: String, color: Color):
 func _on_tree_appeared(_slot: int):
 	pass
 
+func _on_game_over_reason(reason: String):
+	_game_over_reason = reason
+
 func _on_game_over():
 	if game_over_panel:
 		game_over_panel.visible = true
 	if final_score_label:
-		final_score_label.text = "Счёт: %d" % GameManager.score
+		if _game_over_reason != "":
+			final_score_label.text = "%s\nСчёт: %d" % [_game_over_reason, GameManager.score]
+		else:
+			final_score_label.text = "Счёт: %d" % GameManager.score
 	if name_input:
 		name_input.text = ""
 		name_input.visible = GameManager.is_high_score(GameManager.score)

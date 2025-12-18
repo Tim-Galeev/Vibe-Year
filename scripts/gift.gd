@@ -110,11 +110,7 @@ func on_chimney_hit():
 		return
 	has_hit = true
 	
-	if is_star_gift:
-		GameManager.add_score(15, global_position)
-	else:
-		GameManager.on_chimney_hit()  # Добавляет комбо
-	
+	# Очки и комбо уже добавлены в chimney.gd
 	create_hit_effect(Color.GREEN)
 	queue_free()
 

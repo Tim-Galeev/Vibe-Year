@@ -22,6 +22,7 @@ signal pickup_fly_to_hud(icon_type: String, from_pos: Vector2)
 signal big_announcement(text: String, color: Color)
 signal tree_appeared_on_sleigh(slot: int)
 signal combo_changed(combo: int, multiplier: float)
+signal game_over_reason(reason: String)
 
 var score: int = 0
 var high_score: int = 0
@@ -38,8 +39,12 @@ var play_time: float = 0.0
 # Комбо-система
 var combo_count: int = 0
 var combo_multiplier: float = 1.0
+var combo_hits: int = 0  # Реальное количество попаданий в серии
 const COMBO_BONUS_PER_HIT: float = 0.1  # +10% за каждое попадание
-const MAX_COMBO_MULTIPLIER: float = 3.0  # Максимум x3
+# Без потолка роста комбо
+
+# Причина окончания игры
+var game_over_text: String = ""
 
 # Прогрессия
 var total_distance: float = 0.0
@@ -182,6 +187,8 @@ func reset_game():
 	# Сброс комбо
 	combo_count = 0
 	combo_multiplier = 1.0
+	combo_hits = 0
+	game_over_text = ""
 	
 	intro_cocoa_given = false
 	intro_obstacle_added = false
@@ -228,17 +235,22 @@ func end_game():
 	if score > high_score:
 		high_score = score
 	SoundManager.play_sound("game_over")
+	emit_signal("game_over_reason", game_over_text)
 	emit_signal("game_over")
 
 # ========== КОМБО ==========
 
 func add_combo():
-	combo_count += 1
-	combo_multiplier = min(1.0 + combo_count * COMBO_BONUS_PER_HIT, MAX_COMBO_MULTIPLIER)
-	emit_signal("combo_changed", combo_count, combo_multiplier)
+	combo_hits += 1
+	# Комбо засчитывается со 2-го попадания
+	if combo_hits >= 2:
+		combo_count = combo_hits
+		combo_multiplier = 1.0 + (combo_count - 1) * COMBO_BONUS_PER_HIT  # Без потолка
+		emit_signal("combo_changed", combo_count, combo_multiplier)
 
 func reset_combo():
-	if combo_count > 0:
+	if combo_hits > 0:
+		combo_hits = 0
 		combo_count = 0
 		combo_multiplier = 1.0
 		emit_signal("combo_changed", 0, 1.0)
@@ -294,6 +306,7 @@ func use_gift() -> bool:
 		emit_signal("gifts_changed", gifts)
 		
 		if gifts <= 0:
+			game_over_text = "Кончились подарки!"
 			call_deferred("end_game")
 		return true
 	return false
@@ -349,6 +362,7 @@ func take_damage(amount: int = 1) -> bool:
 	_damage_invincible_timer = 1.5
 	
 	if lives <= 0:
+		game_over_text = "Санта устал!"
 		end_game()
 		return true
 	return false

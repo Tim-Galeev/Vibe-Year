@@ -30,9 +30,10 @@ func _on_body_entered(body):
 		GameManager.add_score(100, global_position)
 		GameManager.on_chimney_hit()  # Увеличивает комбо
 		
-		# Звук с pitch в зависимости от комбо (чем больше, тем звонче)
+		# Звук с pitch в зависимости от комбо (меняется каждые 3 попадания)
 		var combo = GameManager.get_combo_count()
-		var pitch = 1.0 + combo * 0.05  # +5% за каждое комбо
+		var pitch_level = combo / 3  # Каждые 3 попадания = +1 уровень
+		var pitch = 1.0 + pitch_level * 0.1  # +10% за каждые 3
 		pitch = min(pitch, 2.0)  # Максимум x2
 		SoundManager.play_sound_pitched("chimney_hit", pitch)
 	
