@@ -1,6 +1,6 @@
 extends Area2D
 
-## Дымоход - цель для подарков
+## Дымоход - цель для подарков, комбо-система
 
 signal gift_received
 
@@ -24,11 +24,17 @@ func _on_body_entered(body):
 	
 	if is_star:
 		GameManager.add_score(15, global_position)
+		SoundManager.play_sound("chimney_hit")
 	else:
+		# Обычный подарок - очки с учётом комбо
 		GameManager.add_score(100, global_position)
-		GameManager.on_chimney_hit()  # Сброс decay таймера
-	
-	SoundManager.play_sound("chimney_hit")
+		GameManager.on_chimney_hit()  # Увеличивает комбо
+		
+		# Звук с pitch в зависимости от комбо (чем больше, тем звонче)
+		var combo = GameManager.get_combo_count()
+		var pitch = 1.0 + combo * 0.05  # +5% за каждое комбо
+		pitch = min(pitch, 2.0)  # Максимум x2
+		SoundManager.play_sound_pitched("chimney_hit", pitch)
 	
 	if body.has_method("on_chimney_hit"):
 		body.on_chimney_hit()
@@ -60,11 +66,23 @@ func create_success_effect():
 		tween.tween_property(chimney_visual, "modulate", Color.GREEN, 0.1)
 		tween.tween_property(chimney_visual, "modulate", original_modulate, 0.3)
 	
-	for i in range(10):
+	# Больше частиц при высоком комбо
+	var combo = GameManager.get_combo_count()
+	var particle_count = 10 + min(combo, 10)
+	
+	for i in range(particle_count):
 		var particle = ColorRect.new()
 		particle.size = Vector2(randf_range(6, 12), randf_range(6, 12))
 		particle.position = Vector2(randf_range(-20, 20), -70)
-		particle.color = [Color.RED, Color.GREEN, Color.GOLD, Color.WHITE].pick_random()
+		
+		# Цвет зависит от комбо
+		if combo >= 10:
+			particle.color = [Color.GOLD, Color.ORANGE, Color.RED].pick_random()
+		elif combo >= 5:
+			particle.color = [Color.GOLD, Color.YELLOW, Color.WHITE].pick_random()
+		else:
+			particle.color = [Color.RED, Color.GREEN, Color.GOLD, Color.WHITE].pick_random()
+		
 		add_child(particle)
 		
 		var tween = create_tween()

@@ -1,6 +1,7 @@
 extends RigidBody2D
 
-## Подарок - ФИКС: звёздные не собирают бонусы, проверка на дубли
+## Подарок - комбо при попадании, сброс при промахе/оливье
+## Бонусы теперь собирает только ёлка!
 
 signal hit_chimney(chimney: Node2D)
 signal hit_blocker(blocker: Node2D)
@@ -9,9 +10,9 @@ signal missed
 var initial_velocity: Vector2 = Vector2(350, 250)
 var has_hit: bool = false
 var is_star_gift: bool = false
-var can_collect_bonuses: bool = true  # Звёздные подарки не собирают
+var can_collect_bonuses: bool = false  # Подарки НЕ собирают бонусы - только ёлка!
 
-var _collected_pickups: Array = []  # Предотвращаем дублирование
+var _collected_pickups: Array = []
 
 func _ready():
 	add_to_group("gift")
@@ -31,34 +32,21 @@ func _physics_process(_delta):
 	if linear_velocity.length() > 10:
 		rotation = linear_velocity.angle()
 	
+	# Промах - улетел за экран
 	if global_position.y > 800 or global_position.x > 1500 or global_position.x < -100:
+		if not is_star_gift:
+			GameManager.on_gift_missed()  # Сброс комбо
 		emit_signal("missed")
 		queue_free()
 	
-	# Проверяем пересечения только если можем собирать
-	if can_collect_bonuses:
-		_check_area_overlaps()
+	# Проверяем препятствия
+	_check_obstacles()
 
-func _check_area_overlaps():
+func _check_obstacles():
 	if has_hit:
 		return
 	
-	# Бонусы - только если не звёздный подарок
-	var pickups = get_tree().get_nodes_in_group("pickup")
-	for pickup in pickups:
-		if not is_instance_valid(pickup):
-			continue
-		if pickup in _collected_pickups:
-			continue  # Уже собрали этот
-		
-		if pickup is Area2D:
-			var dist = global_position.distance_to(pickup.global_position)
-			if dist < 40:
-				_collected_pickups.append(pickup)
-				if pickup.has_method("collect_by_gift"):
-					pickup.collect_by_gift()
-	
-	# Препятствия (оливье)
+	# Препятствия (оливье) - сбрасывают комбо
 	var obstacles = get_tree().get_nodes_in_group("obstacle")
 	for obs in obstacles:
 		if not is_instance_valid(obs):
@@ -72,6 +60,8 @@ func _check_area_overlaps():
 				_collected_pickups.append(obs)
 				if obs.has_method("on_gift_hit"):
 					obs.on_gift_hit(self)
+				if not is_star_gift:
+					GameManager.on_gift_hit_obstacle()  # Сброс комбо
 				has_hit = true
 				queue_free()
 				return
@@ -120,17 +110,17 @@ func on_chimney_hit():
 		return
 	has_hit = true
 	
-	# Звёздные дают меньше очков
 	if is_star_gift:
-		GameManager.add_score(15, global_position)  # Было 50
+		GameManager.add_score(15, global_position)
 	else:
-		# Обычные попадания сбрасывают таймер decay
-		GameManager.on_chimney_hit()
+		GameManager.on_chimney_hit()  # Добавляет комбо
 	
 	create_hit_effect(Color.GREEN)
 	queue_free()
 
 func _on_timeout():
 	if not has_hit:
+		if not is_star_gift:
+			GameManager.on_gift_missed()  # Сброс комбо
 		emit_signal("missed")
 	queue_free()

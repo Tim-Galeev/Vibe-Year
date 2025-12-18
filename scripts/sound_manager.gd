@@ -51,6 +51,22 @@ func play_sound(sound_name: String):
 	if s:
 		p.stream = s
 		p.volume_db = linear_to_db(sfx_volume)
+		p.pitch_scale = 1.0
+		p.play()
+
+func play_sound_pitched(sound_name: String, pitch: float = 0.05):
+	if not sfx_enabled:
+		return
+
+	var p = _get_free_player()
+	if p == null:
+		return
+
+	var s = _create_sound(sound_name)
+	if s:
+		p.stream = s
+		p.volume_db = linear_to_db(sfx_volume)
+		p.pitch_scale = pitch
 		p.play()
 
 
@@ -77,6 +93,7 @@ func _create_sound(snd_name: String) -> AudioStream:
 		"explosion": return _generate_explosion_sound()
 		"ornament_break": return _generate_ornament_sound()
 		"game_over": return _generate_gameover_sound()
+		"olivie": return _generate_olivie_sound()
 		_: return _generate_pickup_sound()
 
 
@@ -398,6 +415,40 @@ func _generate_ornament_sound() -> AudioStream:
 		w += (randf() - 0.5) * 0.25 * exp(-t * 15)
 
 		var v = int(w * env * 26000)
+		data.append(v & 0xFF)
+		data.append((v >> 8) & 0xFF)
+
+	s.data = data
+	return s
+
+
+# --- OLIVIE (squelch/splat) ---
+
+func _generate_olivie_sound() -> AudioStream:
+	var s = _base_sample()
+	var data = PackedByteArray()
+	var length = 0.3
+	var samples = int(44100 * length)
+
+	for i in range(samples):
+		var t = i / 44100.0
+		var env = exp(-t * 8) * (1.0 - exp(-t * 60))
+		
+		# Чавкающий звук - низкие частоты + шум
+		var freq = 150 - t * 80
+		var w = sin(t * freq * TAU) * 0.4
+		w += sin(t * freq * 0.5 * TAU) * 0.3
+		
+		# Хлюпанье
+		w += (randf() - 0.5) * 0.4 * exp(-t * 12)
+		
+		# Небольшое "бульканье"
+		if t < 0.1:
+			w += sin(t * 400 * TAU) * 0.2 * (1.0 - t / 0.1)
+		
+		w = soft_clip(w * 1.3)
+
+		var v = int(w * env * 28000)
 		data.append(v & 0xFF)
 		data.append((v >> 8) & 0xFF)
 

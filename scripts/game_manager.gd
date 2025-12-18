@@ -1,6 +1,6 @@
 extends Node
 
-## Game Manager - частота бонусов зависит от активности игрока
+## Game Manager - комбо-система, улучшенная ёлка
 
 signal score_changed(new_score: int)
 signal gifts_changed(new_count: int)
@@ -21,10 +21,11 @@ signal gift_popup(amount: int, position: Vector2)
 signal pickup_fly_to_hud(icon_type: String, from_pos: Vector2)
 signal big_announcement(text: String, color: Color)
 signal tree_appeared_on_sleigh(slot: int)
+signal combo_changed(combo: int, multiplier: float)
 
 var score: int = 0
 var high_score: int = 0
-var gifts: int = 20
+var gifts: int = 25
 var champagne_bottles: int = 0
 var tree_charges: int = 1
 var lives: int = 3
@@ -34,6 +35,12 @@ var base_scroll_speed: float = 280.0
 var is_game_running: bool = false
 var play_time: float = 0.0
 
+# Комбо-система
+var combo_count: int = 0
+var combo_multiplier: float = 1.0
+const COMBO_BONUS_PER_HIT: float = 0.1  # +10% за каждое попадание
+const MAX_COMBO_MULTIPLIER: float = 3.0  # Максимум x3
+
 # Прогрессия
 var total_distance: float = 0.0
 var gifts_thrown: int = 0
@@ -41,11 +48,11 @@ var lives_lost: int = 0
 var first_star_used: bool = false
 var last_star_end_time: float = 0.0
 
-# Активность игрока - влияет на частоту бонусов
+# Активность игрока
 var last_throw_time: float = 0.0
-var bonus_frequency_multiplier: float = 1.0  # 1.0 = норма, 0.1 = почти нет бонусов
-const ACTIVITY_DECAY_TIME: float = 5.0  # Через 5 сек без бросков начинает падать
-const ACTIVITY_RECOVERY_RATE: float = 0.3  # Восстановление за каждый бросок
+var bonus_frequency_multiplier: float = 1.0
+const ACTIVITY_DECAY_TIME: float = 5.0
+const ACTIVITY_RECOVERY_RATE: float = 0.3
 
 # Этапы введения
 var intro_cocoa_given: bool = false
@@ -68,9 +75,9 @@ var hard_segment_timer: float = 0.0
 var cooldown_after_hard: float = 0.0
 
 const MAX_CHAMPAGNE = 3
-const MAX_TREE_CHARGES = 3
+const MAX_TREE_CHARGES = 5  # Было 3, увеличено
 const MAX_LIVES = 5
-const TREE_CHARGE_TIME = 15.0
+const TREE_CHARGE_TIME = 8.0  # Было 15, уменьшено для быстрой зарядки
 
 const MIN_DISTANCE_BETWEEN_BONUSES = 120
 const MIN_DISTANCE_BETWEEN_FIREWORKS = 400
@@ -106,7 +113,7 @@ func _process(delta):
 		game_speed = 1.0 + (play_time / 60.0) * 0.5
 		game_speed = min(game_speed, 2.5)
 		
-		# Зарядка ёлки
+		# Зарядка ёлки - быстрее!
 		if tree_charges < MAX_TREE_CHARGES:
 			_tree_charge_timer += delta
 			emit_signal("tree_charge_progress", _tree_charge_timer / TREE_CHARGE_TIME)
@@ -114,10 +121,9 @@ func _process(delta):
 				_tree_charge_timer = 0.0
 				add_tree_charge()
 		
-		# Активность игрока - уменьшаем частоту бонусов если не кидает
+		# Активность игрока
 		var time_since_throw = play_time - last_throw_time
 		if time_since_throw > ACTIVITY_DECAY_TIME:
-			# Постепенно уменьшаем множитель
 			var decay = (time_since_throw - ACTIVITY_DECAY_TIME) * 0.05 * delta
 			bonus_frequency_multiplier = max(0.1, bonus_frequency_multiplier - decay)
 		
@@ -159,7 +165,7 @@ func _process(delta):
 
 func reset_game():
 	score = 0
-	gifts = 25  # Было 20, увеличили т.к. попадание не возвращает подарок
+	gifts = 25
 	champagne_bottles = 0
 	tree_charges = 1
 	lives = 3
@@ -172,6 +178,10 @@ func reset_game():
 	last_star_end_time = 0.0
 	last_throw_time = 0.0
 	bonus_frequency_multiplier = 1.0
+	
+	# Сброс комбо
+	combo_count = 0
+	combo_multiplier = 1.0
 	
 	intro_cocoa_given = false
 	intro_obstacle_added = false
@@ -206,6 +216,7 @@ func reset_game():
 	emit_signal("tree_charges_changed", tree_charges)
 	emit_signal("lives_changed", lives)
 	emit_signal("tree_charge_progress", 0.0)
+	emit_signal("combo_changed", 0, 1.0)
 
 func start_game():
 	reset_game()
@@ -219,17 +230,47 @@ func end_game():
 	SoundManager.play_sound("game_over")
 	emit_signal("game_over")
 
+# ========== КОМБО ==========
+
+func add_combo():
+	combo_count += 1
+	combo_multiplier = min(1.0 + combo_count * COMBO_BONUS_PER_HIT, MAX_COMBO_MULTIPLIER)
+	emit_signal("combo_changed", combo_count, combo_multiplier)
+
+func reset_combo():
+	if combo_count > 0:
+		combo_count = 0
+		combo_multiplier = 1.0
+		emit_signal("combo_changed", 0, 1.0)
+		SoundManager.play_sound("olivie")  # Звук салата при сбросе комбо
+
+func get_combo_multiplier() -> float:
+	return combo_multiplier
+
+func get_combo_count() -> int:
+	return combo_count
+
 # ========== ОЧКИ ==========
 
 func add_score(amount: int, pos: Vector2 = Vector2.ZERO):
-	score += amount
+	var final_amount = int(amount * combo_multiplier)
+	score += final_amount
 	emit_signal("score_changed", score)
-	if pos != Vector2.ZERO and amount > 0:
-		emit_signal("score_popup", amount, pos)
+	if pos != Vector2.ZERO and final_amount > 0:
+		emit_signal("score_popup", final_amount, pos)
 
 func on_chimney_hit():
-	# При попадании - восстанавливаем частоту бонусов
+	# При попадании - добавляем комбо и восстанавливаем частоту бонусов
+	add_combo()
 	bonus_frequency_multiplier = min(1.0, bonus_frequency_multiplier + ACTIVITY_RECOVERY_RATE)
+
+func on_gift_missed():
+	# При промахе - сбрасываем комбо
+	reset_combo()
+
+func on_gift_hit_obstacle():
+	# При попадании в оливье - сбрасываем комбо
+	reset_combo()
 
 # ========== ПОДАРКИ ==========
 
@@ -249,7 +290,6 @@ func use_gift() -> bool:
 		gifts -= 1
 		gifts_thrown += 1
 		last_throw_time = play_time
-		# Восстанавливаем частоту бонусов при броске
 		bonus_frequency_multiplier = min(1.0, bonus_frequency_multiplier + ACTIVITY_RECOVERY_RATE * 0.5)
 		emit_signal("gifts_changed", gifts)
 		
@@ -302,6 +342,9 @@ func take_damage(amount: int = 1) -> bool:
 	lives -= amount
 	lives_lost += amount
 	emit_signal("lives_changed", lives)
+	
+	# Урон сбрасывает комбо
+	reset_combo()
 	
 	_damage_invincible_timer = 1.5
 	
@@ -448,7 +491,7 @@ func register_firework_spawn():
 func can_spawn_bonus() -> bool:
 	return total_distance - last_bonus_distance >= MIN_DISTANCE_BETWEEN_BONUSES
 
-func register_bonus_spawn(bonus_type: String):
+func register_bonus_spawn(_bonus_type: String):
 	last_bonus_distance = total_distance
 
 func unlock_bonus(bonus_type: String):

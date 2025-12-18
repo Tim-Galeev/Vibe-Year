@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-## Сани - бросок не работает над UI
+## Сани - с сенсорным управлением
 
 signal gift_thrown(gift: Node2D)
 
@@ -24,11 +24,18 @@ var foam_timer: float = 0.0
 var _champagne_pressed: bool = false
 var _tree_pressed: bool = false
 
+# Сенсорное управление
+var touch_target: Vector2 = Vector2.ZERO
+var is_touch_active: bool = false
+var touch_throw_timer: float = 0.0
+const TOUCH_THROW_DELAY: float = 0.15  # Задержка перед броском при тапе
+
 @onready var sprite: Node2D = $Sprite2D
 
 func _ready():
 	add_to_group("sleigh")
 	position = Vector2(200, 200)
+	touch_target = position
 	
 	GameManager.invincibility_started.connect(_on_invincibility_started)
 	GameManager.invincibility_ended.connect(_on_invincibility_ended)
@@ -36,6 +43,28 @@ func _ready():
 	GameManager.speed_boost_ended.connect(_on_speed_boost_ended)
 	GameManager.star_power_started.connect(_on_star_power_started)
 	GameManager.star_power_ended.connect(_on_star_power_ended)
+
+func _input(event):
+	if not GameManager.is_game_running:
+		return
+	
+	# Сенсорное управление
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			# Проверяем что не тапнули на UI (верхние 100px)
+			if event.position.y > 100:
+				is_touch_active = true
+				touch_target = event.position
+				touch_throw_timer = TOUCH_THROW_DELAY
+		else:
+			is_touch_active = false
+	
+	elif event is InputEventScreenDrag:
+		if event.position.y > 100:
+			is_touch_active = true
+			touch_target = event.position
+			# При перетаскивании - не бросаем
+			touch_throw_timer = -1
 
 func _physics_process(delta):
 	if not GameManager.is_game_running:
@@ -45,6 +74,7 @@ func _physics_process(delta):
 	
 	var input_dir = Vector2.ZERO
 	
+	# Клавиатура
 	if Input.is_action_pressed("move_up"):
 		input_dir.y -= 1
 	if Input.is_action_pressed("move_down"):
@@ -54,12 +84,26 @@ func _physics_process(delta):
 	if Input.is_action_pressed("move_right"):
 		input_dir.x += 1
 	
+	# Геймпад
 	var joy_x = Input.get_joy_axis(0, JOY_AXIS_LEFT_X)
 	var joy_y = Input.get_joy_axis(0, JOY_AXIS_LEFT_Y)
 	if abs(joy_x) > 0.2:
 		input_dir.x += joy_x
 	if abs(joy_y) > 0.2:
 		input_dir.y += joy_y
+	
+	# Сенсорное управление - движение к точке касания
+	if is_touch_active:
+		var diff = touch_target - position
+		if diff.length() > 20:  # Мёртвая зона
+			input_dir = diff.normalized()
+		
+		# Автобросок при тапе
+		if touch_throw_timer > 0:
+			touch_throw_timer -= delta
+			if touch_throw_timer <= 0 and throw_cooldown <= 0 and GameManager.gifts > 0:
+				throw_gift()
+				throw_cooldown = throw_rate
 	
 	input_dir = input_dir.normalized()
 	velocity = input_dir * move_speed
@@ -74,18 +118,16 @@ func _physics_process(delta):
 	position.x = clamp(position.x, min_x, max_x)
 	position.y = clamp(position.y, min_y, max_y)
 	
-	# Бросок подарков - проверяем что мышь не над UI
+	# Бросок подарков - клавиатура/мышь
 	throw_cooldown -= delta
 	if throw_cooldown <= 0:
 		var can_throw = false
 		
-		# Клавиатура - пробел (throw_gift включает пробел)
-		
-		# Геймпад - всегда можно
+		# Геймпад
 		if Input.is_joy_button_pressed(0, JOY_BUTTON_A):
 			can_throw = true
 		
-		# Мышь - только если не над UI
+		# Мышь/клавиатура - только если не над UI
 		if Input.is_action_pressed("throw_gift"):
 			if not _is_mouse_over_ui():
 				can_throw = true
@@ -115,9 +157,7 @@ func _physics_process(delta):
 	_tree_pressed = tree_btn
 
 func _is_mouse_over_ui() -> bool:
-	# Проверяем позицию мыши - верхняя часть экрана это UI
 	var mouse_pos = get_viewport().get_mouse_position()
-	# Верхние 100 пикселей - зона HUD
 	if mouse_pos.y < 100:
 		return true
 	return false
@@ -197,7 +237,6 @@ func throw_star_gifts():
 	var gift_scene = preload("res://scenes/gift.tscn")
 	var count = randi_range(4, 6)
 	
-	# Яркие цвета для звёздных подарков
 	var star_colors = [
 		Color(0.2, 0.6, 1.0),    # Синий
 		Color(0.2, 1.0, 0.4),    # Зелёный

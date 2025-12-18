@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-## HUD - исправленное подключение кнопок
+## HUD - с комбо-индикатором
 
 @onready var center_hud = $CenterHUD
 @onready var score_label = $CenterHUD/ScoreContainer/ScoreLabel
@@ -12,6 +12,7 @@ extends CanvasLayer
 
 @onready var buffs_label = $BuffsLabel
 @onready var announcement_label = $AnnouncementLabel
+@onready var combo_label = $ComboLabel
 
 @onready var game_over_panel = $GameOverPanel
 @onready var final_score_label = $GameOverPanel/VBoxContainer/FinalScoreLabel
@@ -27,6 +28,9 @@ extends CanvasLayer
 @onready var leaderboard_start = $StartPanel/VBoxContainer/LeaderboardStart
 
 @onready var sound_buttons = $SoundButtons
+@onready var touch_controls = $TouchControls
+@onready var champagne_button = $TouchControls/ChampagneButton
+@onready var tree_button = $TouchControls/TreeButton
 
 var popup_container: Node2D
 var menu_buttons: Array = []
@@ -54,6 +58,7 @@ func _ready():
 	GameManager.pickup_fly_to_hud.connect(_on_pickup_fly)
 	GameManager.big_announcement.connect(_on_big_announcement)
 	GameManager.tree_appeared_on_sleigh.connect(_on_tree_appeared)
+	GameManager.combo_changed.connect(_on_combo_changed)
 	
 	popup_container = Node2D.new()
 	popup_container.z_index = 100
@@ -62,12 +67,13 @@ func _ready():
 	if announcement_label:
 		announcement_label.visible = false
 	
-	# Отложенная инициализация кнопок
+	if combo_label:
+		combo_label.visible = false
+	
 	call_deferred("_connect_buttons")
 	call_deferred("_setup_initial_state")
 
 func _connect_buttons():
-	# Кнопки
 	if restart_button:
 		restart_button.pressed.connect(_on_restart_pressed)
 	if start_button:
@@ -75,7 +81,6 @@ func _connect_buttons():
 	if save_score_button:
 		save_score_button.pressed.connect(_on_save_score_pressed)
 	
-	# Кнопки звука - подключаем напрямую
 	var mb = get_node_or_null("StartPanel/VBoxContainer/HBoxContainer/MusicButton")
 	var sb = get_node_or_null("StartPanel/VBoxContainer/HBoxContainer/SFXButton")
 	
@@ -83,6 +88,12 @@ func _connect_buttons():
 		mb.pressed.connect(_on_music_toggle)
 	if sb:
 		sb.pressed.connect(_on_sfx_toggle)
+	
+	# Сенсорные кнопки
+	if champagne_button:
+		champagne_button.pressed.connect(_on_champagne_touch)
+	if tree_button:
+		tree_button.pressed.connect(_on_tree_touch)
 
 func _process(_delta):
 	if GameManager.is_game_running:
@@ -196,6 +207,31 @@ func _on_tree_progress(progress: float):
 	if tree_progress:
 		tree_progress.value = progress * 100
 
+func _on_combo_changed(combo: int, multiplier: float):
+	if not combo_label:
+		return
+	
+	if combo > 0:
+		combo_label.text = "🔥 x%d (%.1fx)" % [combo, multiplier]
+		combo_label.visible = true
+		
+		# Анимация при увеличении комбо
+		var tween = combo_label.create_tween()
+		tween.tween_property(combo_label, "scale", Vector2(1.3, 1.3), 0.1)
+		tween.tween_property(combo_label, "scale", Vector2(1.0, 1.0), 0.1)
+		
+		# Цвет в зависимости от комбо
+		if multiplier >= 2.5:
+			combo_label.add_theme_color_override("font_color", Color(1, 0.3, 0.1))  # Красный
+		elif multiplier >= 2.0:
+			combo_label.add_theme_color_override("font_color", Color(1, 0.6, 0.1))  # Оранжевый
+		elif multiplier >= 1.5:
+			combo_label.add_theme_color_override("font_color", Color(1, 0.9, 0.2))  # Жёлтый
+		else:
+			combo_label.add_theme_color_override("font_color", Color(0.8, 1, 0.3))  # Зелёный
+	else:
+		combo_label.visible = false
+
 func _on_bonus_update():
 	_update_buffs_display()
 
@@ -227,7 +263,16 @@ func _on_score_popup(amount: int, pos: Vector2):
 	var popup = Label.new()
 	popup.text = ("+" if amount > 0 else "") + str(amount)
 	popup.add_theme_font_size_override("font_size", 24)
-	popup.add_theme_color_override("font_color", Color.GREEN if amount > 0 else Color.GRAY)
+	
+	# Цвет зависит от комбо
+	var combo = GameManager.get_combo_count()
+	if combo >= 10:
+		popup.add_theme_color_override("font_color", Color(1, 0.3, 0.1))
+	elif combo >= 5:
+		popup.add_theme_color_override("font_color", Color(1, 0.7, 0.1))
+	else:
+		popup.add_theme_color_override("font_color", Color.GREEN if amount > 0 else Color.GRAY)
+	
 	popup.global_position = pos + Vector2(-20, -30)
 	popup_container.add_child(popup)
 	
@@ -321,6 +366,10 @@ func _on_game_over():
 		save_score_button.visible = GameManager.is_high_score(GameManager.score)
 	if sound_buttons:
 		sound_buttons.visible = false
+	if combo_label:
+		combo_label.visible = false
+	if touch_controls:
+		touch_controls.visible = false
 	
 	menu_buttons = [restart_button]
 	if save_score_button and save_score_button.visible:
@@ -337,6 +386,8 @@ func _on_game_started():
 		game_over_panel.visible = false
 	if sound_buttons:
 		sound_buttons.visible = true
+	if touch_controls:
+		touch_controls.visible = true
 	menu_buttons.clear()
 
 func show_start_screen():
@@ -346,6 +397,10 @@ func show_start_screen():
 		game_over_panel.visible = false
 	if sound_buttons:
 		sound_buttons.visible = false
+	if combo_label:
+		combo_label.visible = false
+	if touch_controls:
+		touch_controls.visible = false
 	
 	var mb = get_node_or_null("StartPanel/VBoxContainer/HBoxContainer/MusicButton")
 	var sb = get_node_or_null("StartPanel/VBoxContainer/HBoxContainer/SFXButton")
@@ -404,3 +459,15 @@ func _update_leaderboard_display():
 			entry.add_theme_font_size_override("font_size", 14)
 			entry.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			leaderboard_container.add_child(entry)
+
+# Сенсорные кнопки
+func _on_champagne_touch():
+	if GameManager.is_game_running:
+		if GameManager.use_champagne():
+			SoundManager.play_sound("boost")
+
+func _on_tree_touch():
+	if GameManager.is_game_running:
+		var sleigh = get_tree().get_first_node_in_group("sleigh")
+		if sleigh and sleigh.has_method("use_tree_grenade"):
+			sleigh.use_tree_grenade()

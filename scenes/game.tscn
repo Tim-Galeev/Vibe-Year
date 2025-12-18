@@ -1,9 +1,9 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=5 format=3 uid="uid://p1gfd2gnwwpj"]
 
-[ext_resource type="Script" path="res://scripts/background.gd" id="1_bg"]
-[ext_resource type="Script" path="res://scripts/roof_spawner.gd" id="2_spawner"]
-[ext_resource type="PackedScene" path="res://scenes/santa_sleigh.tscn" id="3_sleigh"]
-[ext_resource type="Script" path="res://scripts/hud.gd" id="4_hud"]
+[ext_resource type="Script" uid="uid://b1drhjvb5r5wl" path="res://scripts/background.gd" id="1_bg"]
+[ext_resource type="Script" uid="uid://ba5jj5rgs003r" path="res://scripts/roof_spawner.gd" id="2_spawner"]
+[ext_resource type="PackedScene" uid="uid://cn852620pxg4" path="res://scenes/santa_sleigh.tscn" id="3_sleigh"]
+[ext_resource type="Script" uid="uid://cfn40mnru4215" path="res://scripts/hud.gd" id="4_hud"]
 
 [node name="Game" type="Node2D"]
 
@@ -45,9 +45,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -380.0
-offset_top = 8.0
+offset_top = 11.0
 offset_right = 380.0
-offset_bottom = 58.0
+offset_bottom = 64.0
 grow_horizontal = 2
 theme_override_constants/separation = 30
 alignment = 1
@@ -60,14 +60,12 @@ theme_override_constants/separation = 4
 
 [node name="Icon" type="Label" parent="HUD/CenterHUD/ChampagneContainer"]
 layout_mode = 2
-size_flags_vertical = 4
 theme_override_font_sizes/font_size = 32
 text = "🍾"
 vertical_alignment = 1
 
 [node name="Label" type="Label" parent="HUD/CenterHUD/ChampagneContainer"]
 layout_mode = 2
-size_flags_vertical = 4
 theme_override_colors/font_color = Color(0.8, 1, 0.8, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
@@ -88,14 +86,12 @@ theme_override_constants/separation = 4
 
 [node name="Icon" type="Label" parent="HUD/CenterHUD/TreeContainer/Top"]
 layout_mode = 2
-size_flags_vertical = 4
 theme_override_font_sizes/font_size = 28
 text = "🎄"
 vertical_alignment = 1
 
 [node name="Label" type="Label" parent="HUD/CenterHUD/TreeContainer/Top"]
 layout_mode = 2
-size_flags_vertical = 4
 theme_override_colors/font_color = Color(0.5, 1, 0.5, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
@@ -104,10 +100,9 @@ text = "1"
 vertical_alignment = 1
 
 [node name="TreeProgress" type="ProgressBar" parent="HUD/CenterHUD/TreeContainer"]
-custom_minimum_size = Vector2(50, 6)
+modulate = Color(0.3, 0.9, 0.3, 1)
+custom_minimum_size = Vector2(50, 8)
 layout_mode = 2
-max_value = 100.0
-value = 0.0
 show_percentage = false
 
 [node name="ScoreContainer" type="HBoxContainer" parent="HUD/CenterHUD"]
@@ -117,7 +112,6 @@ size_flags_vertical = 4
 
 [node name="ScoreLabel" type="Label" parent="HUD/CenterHUD/ScoreContainer"]
 layout_mode = 2
-size_flags_vertical = 4
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
@@ -133,14 +127,12 @@ theme_override_constants/separation = 4
 
 [node name="Icon" type="Label" parent="HUD/CenterHUD/GiftsContainer"]
 layout_mode = 2
-size_flags_vertical = 4
 theme_override_font_sizes/font_size = 32
 text = "🎁"
 vertical_alignment = 1
 
 [node name="Label" type="Label" parent="HUD/CenterHUD/GiftsContainer"]
 layout_mode = 2
-size_flags_vertical = 4
 theme_override_colors/font_color = Color(1, 0.9, 0.3, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
@@ -155,7 +147,6 @@ size_flags_vertical = 4
 
 [node name="Label" type="Label" parent="HUD/CenterHUD/LivesContainer"]
 layout_mode = 2
-size_flags_vertical = 4
 theme_override_colors/font_color = Color(0.9, 0.2, 0.2, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 2
@@ -176,8 +167,24 @@ theme_override_colors/font_color = Color(1, 0.95, 0.4, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 2
 theme_override_font_sizes/font_size = 16
-text = ""
 horizontal_alignment = 1
+
+[node name="ComboLabel" type="Label" parent="HUD"]
+visible = false
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -180.0
+offset_top = 90.0
+offset_right = -10.0
+offset_bottom = 120.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(1, 0.9, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 22
+text = "🔥 x5 (1.5x)"
+horizontal_alignment = 2
 
 [node name="AnnouncementLabel" type="Label" parent="HUD"]
 visible = false
@@ -232,7 +239,7 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 0.5)
 theme_override_font_sizes/font_size = 11
-text = "WASD - движение | Клик/Пробел - бросок | E - ускорение | Q - ёлка"
+text = "WASD/Тап - движение | Клик/Пробел - бросок | E - ускорение | Q - ёлка"
 horizontal_alignment = 1
 
 [node name="StartPanel" type="Panel" parent="HUD"]
@@ -345,3 +352,30 @@ layout_mode = 2
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "🔄 Заново"
+
+[node name="TouchControls" type="HBoxContainer" parent="HUD"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -180.0
+offset_top = -80.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="ChampagneButton" type="Button" parent="HUD/TouchControls"]
+custom_minimum_size = Vector2(70, 70)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "🍾"
+
+[node name="TreeButton" type="Button" parent="HUD/TouchControls"]
+custom_minimum_size = Vector2(70, 70)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "🎄"
