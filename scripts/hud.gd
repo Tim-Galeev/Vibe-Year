@@ -31,6 +31,7 @@ extends CanvasLayer
 @onready var music_toggle = $SoundButtons/MusicToggle
 @onready var sfx_toggle = $SoundButtons/SFXToggle
 @onready var touch_controls = $TouchControls
+@onready var throw_button = $TouchControls/ThrowButton
 @onready var champagne_button = $TouchControls/ChampagneButton
 @onready var tree_button = $TouchControls/TreeButton
 
@@ -94,6 +95,8 @@ func _connect_buttons():
 		sb.pressed.connect(_on_sfx_toggle)
 	
 	# Сенсорные кнопки
+	if throw_button:
+		throw_button.pressed.connect(_on_throw_touch)
 	if champagne_button:
 		champagne_button.pressed.connect(_on_champagne_touch)
 	if tree_button:
@@ -483,6 +486,12 @@ func _update_leaderboard_display():
 			leaderboard_container.add_child(entry)
 
 # Сенсорные кнопки
+func _on_throw_touch():
+	if GameManager.is_game_running:
+		var sleigh = get_tree().get_first_node_in_group("sleigh")
+		if sleigh and sleigh.has_method("throw_gift"):
+			sleigh.throw_gift()
+
 func _on_champagne_touch():
 	if GameManager.is_game_running:
 		if GameManager.use_champagne():

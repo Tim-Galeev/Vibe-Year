@@ -24,18 +24,18 @@ var foam_timer: float = 0.0
 var _champagne_pressed: bool = false
 var _tree_pressed: bool = false
 
-# Сенсорное управление
-var touch_target: Vector2 = Vector2.ZERO
-var is_touch_active: bool = false
-var touch_throw_timer: float = 0.0
-const TOUCH_THROW_DELAY: float = 0.15  # Задержка перед броском при тапе
+# Сенсорное управление - свайпы
+var swipe_direction: Vector2 = Vector2.ZERO
+var touch_start_pos: Vector2 = Vector2.ZERO
+var is_swiping: bool = false
+const SWIPE_THRESHOLD: float = 10.0  # Минимальное расстояние для свайпа
+const SWIPE_SENSITIVITY: float = 0.08  # Чувствительность свайпа
 
 @onready var sprite: Node2D = $Sprite2D
 
 func _ready():
 	add_to_group("sleigh")
 	position = Vector2(200, 200)
-	touch_target = position
 	
 	GameManager.invincibility_started.connect(_on_invincibility_started)
 	GameManager.invincibility_ended.connect(_on_invincibility_ended)
@@ -48,23 +48,26 @@ func _input(event):
 	if not GameManager.is_game_running:
 		return
 	
-	# Сенсорное управление
+	# Сенсорное управление - свайпы
 	if event is InputEventScreenTouch:
 		if event.pressed:
-			# Проверяем что не тапнули на UI (верхние 100px)
-			if event.position.y > 100:
-				is_touch_active = true
-				touch_target = event.position
-				touch_throw_timer = TOUCH_THROW_DELAY
+			# Начало касания
+			touch_start_pos = event.position
+			is_swiping = true
+			swipe_direction = Vector2.ZERO
 		else:
-			is_touch_active = false
+			# Конец касания - плавно останавливаемся
+			is_swiping = false
 	
 	elif event is InputEventScreenDrag:
-		if event.position.y > 100:
-			is_touch_active = true
-			touch_target = event.position
-			# При перетаскивании - не бросаем
-			touch_throw_timer = -1
+		if is_swiping:
+			# Вычисляем направление свайпа относительно начальной точки
+			var diff = event.position - touch_start_pos
+			if diff.length() > SWIPE_THRESHOLD:
+				swipe_direction = diff * SWIPE_SENSITIVITY
+				# Ограничиваем максимальную скорость
+				if swipe_direction.length() > 1.0:
+					swipe_direction = swipe_direction.normalized()
 
 func _physics_process(delta):
 	if not GameManager.is_game_running:
@@ -92,18 +95,12 @@ func _physics_process(delta):
 	if abs(joy_y) > 0.2:
 		input_dir.y += joy_y
 	
-	# Сенсорное управление - движение к точке касания
-	if is_touch_active:
-		var diff = touch_target - position
-		if diff.length() > 20:  # Мёртвая зона
-			input_dir = diff.normalized()
-		
-		# Автобросок при тапе
-		if touch_throw_timer > 0:
-			touch_throw_timer -= delta
-			if touch_throw_timer <= 0 and throw_cooldown <= 0 and GameManager.gifts > 0:
-				throw_gift()
-				throw_cooldown = throw_rate
+	# Сенсорное управление - свайпы
+	if is_swiping and swipe_direction.length() > 0.1:
+		input_dir += swipe_direction
+	elif not is_swiping:
+		# Плавное затухание при отпускании
+		swipe_direction = swipe_direction.lerp(Vector2.ZERO, 0.2)
 	
 	input_dir = input_dir.normalized()
 	velocity = input_dir * move_speed
@@ -134,7 +131,6 @@ func _physics_process(delta):
 		
 		if can_throw and GameManager.gifts > 0:
 			throw_gift()
-			throw_cooldown = throw_rate
 	
 	# Звёздная сила
 	if GameManager.is_star_power_active():
@@ -221,8 +217,12 @@ func _emit_foam():
 			tween.tween_callback(foam.queue_free)
 
 func throw_gift():
+	if throw_cooldown > 0:
+		return
 	if not GameManager.use_gift():
 		return
+	
+	throw_cooldown = throw_rate
 	
 	var gift_scene = preload("res://scenes/gift.tscn")
 	var gift = gift_scene.instantiate()

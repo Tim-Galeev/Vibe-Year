@@ -359,7 +359,7 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -180.0
+offset_left = -250.0
 offset_top = -80.0
 offset_right = -10.0
 offset_bottom = -10.0
@@ -367,6 +367,12 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_constants/separation = 10
 alignment = 2
+
+[node name="ThrowButton" type="Button" parent="HUD/TouchControls"]
+custom_minimum_size = Vector2(70, 70)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "🎁"
 
 [node name="ChampagneButton" type="Button" parent="HUD/TouchControls"]
 custom_minimum_size = Vector2(70, 70)
