@@ -109,6 +109,19 @@ const MAX_LEADERBOARD_ENTRIES = 10
 func _ready():
 	_load_leaderboard()
 	reset_game()
+	
+	# Для веб-версии: отслеживаем изменение размера окна
+	if OS.get_name() == "Web":
+		get_tree().root.size_changed.connect(_on_window_size_changed)
+		# Применить сразу при запуске
+		call_deferred("_on_window_size_changed")
+
+func _on_window_size_changed():
+	# Получаем размер окна браузера
+	var window_size = DisplayServer.window_get_size()
+	if window_size.x > 0 and window_size.y > 0:
+		# Обновляем размер окна
+		DisplayServer.window_set_size(window_size)
 
 func _process(delta):
 	if is_game_running:
