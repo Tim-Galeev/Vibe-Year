@@ -149,7 +149,9 @@ func setup_roof(roof: Node2D, roof_y: float):
 	if roof.has_method("set_width"):
 		roof.set_width(width)
 	
-	var building_height = 720 - roof_y + 100
+	# Высота здания до низа экрана (адаптивно)
+	var viewport_height = get_viewport_rect().size.y
+	var building_height = viewport_height - roof_y + 100
 	if roof.has_method("set_building_height"):
 		roof.set_building_height(building_height)
 	

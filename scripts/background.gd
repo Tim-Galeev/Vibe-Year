@@ -3,9 +3,21 @@ extends Node2D
 ## Фон - ночное небо со звёздами
 
 @onready var stars_container: Node2D = $Stars
+@onready var sky: ColorRect = $Sky
 
 func _ready():
+	_update_sky_size()
 	_generate_stars()
+	# Подписываемся на изменение размера окна
+	get_tree().root.size_changed.connect(_on_viewport_size_changed)
+
+func _on_viewport_size_changed():
+	_update_sky_size()
+
+func _update_sky_size():
+	if sky:
+		var viewport_size = get_viewport_rect().size
+		sky.size = viewport_size
 
 func _generate_stars():
 	if not stars_container:

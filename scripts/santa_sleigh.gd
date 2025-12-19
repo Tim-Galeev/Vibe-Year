@@ -65,9 +65,9 @@ func _input(event):
 		return
 	
 	if event is InputEventScreenTouch:
-		# Игнорируем касания в зоне кнопок (правый нижний угол)
+		# Игнорируем касания в зоне кнопок (правый край, вертикальная панель)
 		var viewport_size = get_viewport_rect().size
-		if event.position.x > viewport_size.x - 260 and event.position.y > viewport_size.y - 90:
+		if event.position.x > viewport_size.x - 100 and event.position.y > viewport_size.y - 260:
 			return
 		
 		if event.pressed:
@@ -82,7 +82,7 @@ func _input(event):
 	elif event is InputEventScreenDrag:
 		# Игнорируем свайпы в зоне кнопок
 		var viewport_size = get_viewport_rect().size
-		if event.position.x > viewport_size.x - 260 and event.position.y > viewport_size.y - 90:
+		if event.position.x > viewport_size.x - 100 and event.position.y > viewport_size.y - 260:
 			return
 		
 		if is_swiping:
@@ -141,9 +141,9 @@ func _physics_process(delta):
 	position.x = clamp(position.x, min_x, max_x)
 	position.y = clamp(position.y, min_y, max_y)
 	
-	# Бросок подарков - клавиатура/мышь
+	# Бросок подарков - клавиатура/мышь (только на ПК)
 	throw_cooldown -= delta
-	if throw_cooldown <= 0:
+	if throw_cooldown <= 0 and not is_mobile:
 		var can_throw = false
 		
 		# Геймпад
