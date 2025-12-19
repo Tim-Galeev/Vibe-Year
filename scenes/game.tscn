@@ -220,10 +220,12 @@ grow_horizontal = 0
 
 [node name="MusicToggle" type="Button" parent="HUD/SoundButtons"]
 layout_mode = 2
+focus_mode = 0
 text = "🎵"
 
 [node name="SFXToggle" type="Button" parent="HUD/SoundButtons"]
 layout_mode = 2
+focus_mode = 0
 text = "🔊"
 
 [node name="ControlsHint" type="Label" parent="HUD"]
