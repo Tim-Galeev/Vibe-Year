@@ -40,8 +40,12 @@ var menu_buttons: Array = []
 var current_button_index: int = 0
 var _joy_pressed: bool = false
 var _game_over_reason: String = ""
+var is_mobile: bool = false
 
 func _ready():
+	# Определяем мобильное устройство
+	is_mobile = _detect_mobile()
+	
 	# Сигналы GameManager
 	GameManager.score_changed.connect(_on_score_changed)
 	GameManager.gifts_changed.connect(_on_gifts_changed)
@@ -162,6 +166,20 @@ func _setup_initial_state():
 	_update_sound_buttons()
 	_update_leaderboard_display()
 	show_start_screen()
+	
+	# Скрываем сенсорные кнопки на ПК
+	if touch_controls:
+		touch_controls.visible = false
+
+func _detect_mobile() -> bool:
+	# Определяем мобильное устройство по OS
+	var os_name = OS.get_name()
+	if os_name in ["Android", "iOS"]:
+		return true
+	# В браузере проверяем тачскрин
+	if os_name == "Web":
+		return DisplayServer.is_touchscreen_available()
+	return false
 
 func _update_sound_buttons():
 	var mb = get_node_or_null("StartPanel/VBoxContainer/HBoxContainer/MusicButton")
@@ -412,7 +430,8 @@ func _on_game_started():
 	if sound_buttons:
 		sound_buttons.visible = true
 	if touch_controls:
-		touch_controls.visible = true
+		# Показываем только на мобильных
+		touch_controls.visible = is_mobile
 	menu_buttons.clear()
 
 func show_start_screen():

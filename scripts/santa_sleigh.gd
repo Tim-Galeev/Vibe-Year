@@ -28,6 +28,7 @@ var _tree_pressed: bool = false
 var swipe_direction: Vector2 = Vector2.ZERO
 var touch_start_pos: Vector2 = Vector2.ZERO
 var is_swiping: bool = false
+var is_mobile: bool = false
 const SWIPE_THRESHOLD: float = 10.0  # Минимальное расстояние для свайпа
 const SWIPE_SENSITIVITY: float = 0.08  # Чувствительность свайпа
 
@@ -37,6 +38,9 @@ func _ready():
 	add_to_group("sleigh")
 	position = Vector2(200, 200)
 	
+	# Определяем мобильное устройство
+	is_mobile = _detect_mobile()
+	
 	GameManager.invincibility_started.connect(_on_invincibility_started)
 	GameManager.invincibility_ended.connect(_on_invincibility_ended)
 	GameManager.speed_boost_started.connect(_on_speed_boost_started)
@@ -44,12 +48,28 @@ func _ready():
 	GameManager.star_power_started.connect(_on_star_power_started)
 	GameManager.star_power_ended.connect(_on_star_power_ended)
 
+func _detect_mobile() -> bool:
+	var os_name = OS.get_name()
+	if os_name in ["Android", "iOS"]:
+		return true
+	if os_name == "Web":
+		return DisplayServer.is_touchscreen_available()
+	return false
+
 func _input(event):
 	if not GameManager.is_game_running:
 		return
 	
-	# Сенсорное управление - свайпы
+	# Сенсорное управление - только на мобильных
+	if not is_mobile:
+		return
+	
 	if event is InputEventScreenTouch:
+		# Игнорируем касания в зоне кнопок (правый нижний угол)
+		var viewport_size = get_viewport_rect().size
+		if event.position.x > viewport_size.x - 260 and event.position.y > viewport_size.y - 90:
+			return
+		
 		if event.pressed:
 			# Начало касания
 			touch_start_pos = event.position
@@ -60,6 +80,11 @@ func _input(event):
 			is_swiping = false
 	
 	elif event is InputEventScreenDrag:
+		# Игнорируем свайпы в зоне кнопок
+		var viewport_size = get_viewport_rect().size
+		if event.position.x > viewport_size.x - 260 and event.position.y > viewport_size.y - 90:
+			return
+		
 		if is_swiping:
 			# Вычисляем направление свайпа относительно начальной точки
 			var diff = event.position - touch_start_pos
@@ -95,12 +120,13 @@ func _physics_process(delta):
 	if abs(joy_y) > 0.2:
 		input_dir.y += joy_y
 	
-	# Сенсорное управление - свайпы
-	if is_swiping and swipe_direction.length() > 0.1:
-		input_dir += swipe_direction
-	elif not is_swiping:
-		# Плавное затухание при отпускании
-		swipe_direction = swipe_direction.lerp(Vector2.ZERO, 0.2)
+	# Сенсорное управление - свайпы (только на мобильных)
+	if is_mobile:
+		if is_swiping and swipe_direction.length() > 0.1:
+			input_dir += swipe_direction
+		elif not is_swiping:
+			# Плавное затухание при отпускании
+			swipe_direction = swipe_direction.lerp(Vector2.ZERO, 0.2)
 	
 	input_dir = input_dir.normalized()
 	velocity = input_dir * move_speed
